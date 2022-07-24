@@ -51,3 +51,32 @@ personality.advertise = ${PWNAGOTCHI_PERSONALITY_ADVERTISE}
 personality.deauth = ${PWNAGOTCHI_PERSONALITY_DEAUTH}
 personality.associate = ${PWNAGOTCHI_PERSONALITY_ASSOCIATE}
 personality.channels = ${PWNAGOTCHI_PERSONALITY_CHANNELS}
+
+
+# Bluetooth
+main.plugins.bt-tether.enabled = true
+
+main.plugins.bt-tether.devices.android-phone.enabled = true          # the name of this entry is android-phone
+main.plugins.bt-tether.devices.android-phone.search_order = 1         # in which order the devices should
+                                                                      ## be searched. E.g. this is #1
+main.plugins.bt-tether.devices.android-phone.mac = """${PWNAGOTCHI_ANDROID_MAC}"""                 # you need to put your phones
+                                                                      ## bt-mac here (settings > status)
+main.plugins.bt-tether.devices.android-phone.ip = """${PWNAGOTCHI_ANDROID_IP}"""     # this is the static ip of your pwnagotchi
+                                                                      ## adjust this to your phones pan-network
+                                                                      ## (run "ifconfig bt-pan" on your phone)
+                                                                      ## if you feel lucky,
+                                                                      ## try: 192.168.44.44 (Android) or
+                                                                      ## 172.20.10.6 (iOS)
+                                                                      ## 44 is just an example, you can choose
+                                                                      ## between 2-254 (if netmask is 24)
+main.plugins.bt-tether.devices.android-phone.netmask = 24             # netmask of the PAN
+main.plugins.bt-tether.devices.android-phone.interval = 1             # in minues, how often should
+                                                                      ## the device be searched
+main.plugins.bt-tether.devices.android-phone.scantime = 10            # in seconds, how long should be searched
+                                                                      ## on each interval
+main.plugins.bt-tether.devices.android-phone.max_tries = 10           # how many times it should try to find the
+                                                                      ## phone (0 = endless)
+main.plugins.bt-tether.devices.android-phone.share_internet = true   # set to true if you want to have
+                                                                      ## internet via bluetooth
+main.plugins.bt-tether.devices.android-phone.priority = 1             # the device with the highest
+                                                                     ## priority wins (1 = highest)

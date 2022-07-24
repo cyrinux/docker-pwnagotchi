@@ -327,6 +327,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		systemd \
 		tcpdump \
 		wireless-tools \
+        bluetooth \
+        bluez \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -373,9 +375,10 @@ RUN find /usr/local/bin/ -type f -not -perm 0755 -exec chmod 0755 '{}' ';'
 
 # Copy and enable services
 COPY --chown=root:root ./scripts/service/ /etc/systemd/system/
+RUN sed -i 's/bluetoothd/bluetoothd --noplugin=sap/' /lib/systemd/system/bluetooth.service
 RUN find /etc/systemd/system/ -type f -regex '.+\.\(target\|service\)' -not -perm 0644 -exec chmod 0644 '{}' ';'
 RUN systemctl set-default container.target
-RUN systemctl enable bettercap.service pwnagotchi.service pwngrid.service
+RUN systemctl enable bettercap.service pwnagotchi.service pwngrid.service bluetooth.service
 
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
