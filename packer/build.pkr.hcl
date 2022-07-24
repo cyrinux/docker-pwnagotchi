@@ -1,3 +1,7 @@
+variable "image_repository" {
+  default = env("IMAGE_REPOSITORY")
+}
+
 build {
   sources = [
     "source.arm-image.armhf"
@@ -97,7 +101,7 @@ build {
       EOF
       ,
       <<EOF
-        download-frozen-image /tmp/pwnagotchi-image/ hectorm/pwnagotchi:latest
+        download-frozen-image /tmp/pwnagotchi-image/ ${var.image_repository}/pwnagotchi:latest
         tar -cf /var/lib/pwnagotchi-image.tar -C /tmp/pwnagotchi-image/ ./
         rm -rf /tmp/pwnagotchi-image/
       EOF
