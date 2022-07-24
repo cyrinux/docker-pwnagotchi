@@ -327,6 +327,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		systemd \
 		tcpdump \
 		wireless-tools \
+        bluetooth \
+        bluez \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
