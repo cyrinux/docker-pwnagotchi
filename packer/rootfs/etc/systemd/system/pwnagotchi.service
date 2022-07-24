@@ -7,9 +7,7 @@ After=docker.service
 Type=simple
 User=root
 Group=root
-Environment=CONTAINER=pwnagotchi
-Environment=IMAGE=docker.io/hectorm/pwnagotchi
-Environment=TAG=latest
+EnvironmentFile=/etc/pwnagotchi.env
 ExecStartPre=/usr/bin/install -d -m 0755 -o 0 -g 0 /var/lib/pwnagotchi/
 ExecStartPre=/usr/bin/install -d -m 0755 -o 0 -g 0 /var/log/pwnagotchi/
 ExecStartPre=/bin/sh -euc ' \
