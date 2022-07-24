@@ -54,7 +54,7 @@ all: save-native-image
 
 .PHONY: packer
 packer:
-	make -C packer build
+	make -C packer all IMAGE_NAME=$(IMAGE_NAME)
 
 ##################################################
 ## "build-*" targets

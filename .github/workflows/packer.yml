@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+=======
+>>>>>>> 1880dc7 (chore: wip)
 name: "Packer"
 
 on:
