@@ -26,12 +26,14 @@ ExecStart=/usr/bin/docker run \
 	--rm --name ${CONTAINER} --hostname %H \
 	--tty --attach STDOUT --attach STDERR \
 	--log-opt max-size=10m --log-opt max-file=1 \
+    --cap-add=SYS_ADMIN --cap-add=NET_ADMIN \
 	--privileged --network host \
 	--mount type=tmpfs,dst=/run/,tmpfs-mode=0755 \
 	--mount type=tmpfs,dst=/tmp/,tmpfs-mode=1777 \
 	--mount type=bind,src=/sys/fs/cgroup/,dst=/sys/fs/cgroup/,ro \
 	--mount type=bind,src=/var/lib/pwnagotchi/,dst=/root/ \
 	--mount type=bind,src=/var/log/pwnagotchi/,dst=/var/log/journal/ \
+    --volume /var/lib/bluetooth/:/var/lib/bluetooth/ \
 	--env PWNAGOTCHI_NAME=%H \
 	--env-file /etc/pwnagotchi.env \
 	${IMAGE}:${TAG}
