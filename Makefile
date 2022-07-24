@@ -67,7 +67,6 @@ $(IMAGE_NATIVE_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 		'$(DOCKERFILE_TEMPLATE)' > '$@'
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)' \
-		--tag '$(IMAGE_NAME):latest' \
 		--file '$@' ./
 
 .PHONY: build-cross-images
@@ -135,6 +134,7 @@ $(IMAGE_RASPIOS_ARM32V6_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm32v6' \
 		--tag '$(IMAGE_NAME):latest-raspios-arm32v6' \
+		--tag '$(IMAGE_NAME):latest' \
 		--file '$@' ./
 
 ##################################################
