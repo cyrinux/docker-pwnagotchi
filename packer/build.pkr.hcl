@@ -1,5 +1,5 @@
-variable "image_repository" {
-  default = env("IMAGE_REPOSITORY")
+variable "image_name" {
+  default = env("IMAGE_NAME")
 }
 
 build {
@@ -101,7 +101,7 @@ build {
       EOF
       ,
       <<EOF
-        download-frozen-image /tmp/pwnagotchi-image/ ${var.image_repository}/pwnagotchi:latest
+        download-frozen-image /tmp/pwnagotchi-image/ ${var.image_name}:latest
         tar -cf /var/lib/pwnagotchi-image.tar -C /tmp/pwnagotchi-image/ ./
         rm -rf /tmp/pwnagotchi-image/
       EOF
