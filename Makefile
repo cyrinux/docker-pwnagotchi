@@ -16,14 +16,9 @@ IMAGE_NAMESPACE ?= hectorm
 IMAGE_PROJECT ?= pwnagotchi
 
 IMAGE_NAME := $(IMAGE_REGISTRY)/$(IMAGE_NAMESPACE)/$(IMAGE_PROJECT)
-ifeq ($(shell '$(GIT)' status --porcelain 2>/dev/null),)
-	IMAGE_GIT_TAG := $(shell '$(GIT)' tag --list --contains HEAD 2>/dev/null)
-	IMAGE_GIT_SHA := $(shell '$(GIT)' rev-parse --verify --short HEAD 2>/dev/null)
-	IMAGE_VERSION := $(if $(IMAGE_GIT_TAG),$(IMAGE_GIT_TAG),$(if $(IMAGE_GIT_SHA),$(IMAGE_GIT_SHA),nil))
-else
-	IMAGE_GIT_BRANCH := $(shell '$(GIT)' symbolic-ref --short HEAD 2>/dev/null)
-	IMAGE_VERSION := $(if $(IMAGE_GIT_BRANCH),$(IMAGE_GIT_BRANCH)-dirty,nil)
-endif
+IMAGE_GIT_TAG := $(shell '$(GIT)' tag -l --contains HEAD 2>/dev/null)
+IMAGE_GIT_SHA := $(shell '$(GIT)' rev-parse HEAD 2>/dev/null)
+IMAGE_VERSION := $(if $(IMAGE_GIT_TAG),$(IMAGE_GIT_TAG),$(if $(IMAGE_GIT_SHA),$(IMAGE_GIT_SHA),nil))
 
 IMAGE_BUILD_OPTS :=
 
@@ -72,7 +67,6 @@ $(IMAGE_NATIVE_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 		'$(DOCKERFILE_TEMPLATE)' > '$@'
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)' \
-		--tag '$(IMAGE_NAME):latest' \
 		--file '$@' ./
 
 .PHONY: build-cross-images
@@ -87,6 +81,7 @@ $(IMAGE_GENERIC_AMD64_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 		--prefix-builtins \
 		--define=DEBIAN_IMAGE_NAME=docker.io/amd64/debian \
 		--define=DEBIAN_IMAGE_TAG=buster \
+		--define=CROSS_QEMU=/usr/bin/qemu-x86_64-static \
 		'$(DOCKERFILE_TEMPLATE)' > '$@'
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-generic-amd64' \
@@ -103,6 +98,7 @@ $(IMAGE_RASPIOS_ARM64V8_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 		--prefix-builtins \
 		--define=DEBIAN_IMAGE_NAME=docker.io/balenalib/rpi-raspbian \
 		--define=DEBIAN_IMAGE_TAG=buster \
+		--define=CROSS_QEMU=/usr/bin/qemu-aarch64-static \
 		'$(DOCKERFILE_TEMPLATE)' > '$@'
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm64v8' \
@@ -119,6 +115,7 @@ $(IMAGE_RASPIOS_ARM32V7_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 		--prefix-builtins \
 		--define=DEBIAN_IMAGE_NAME=docker.io/balenalib/rpi-raspbian \
 		--define=DEBIAN_IMAGE_TAG=buster \
+		--define=CROSS_QEMU=/usr/bin/qemu-arm-static \
 		'$(DOCKERFILE_TEMPLATE)' > '$@'
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm32v7' \
@@ -135,11 +132,13 @@ $(IMAGE_RASPIOS_ARM32V6_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 		--prefix-builtins \
 		--define=DEBIAN_IMAGE_NAME=docker.io/balenalib/rpi-raspbian \
 		--define=DEBIAN_IMAGE_TAG=buster \
+		--define=CROSS_QEMU=/usr/bin/qemu-arm-static \
 		'$(DOCKERFILE_TEMPLATE)' > '$@'
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm32v6' \
 		--tag '$(IMAGE_NAME):latest-raspios-arm32v6' \
 		--platform linux/arm/v6 \
+		--tag '$(IMAGE_NAME):latest' \
 		--file '$@' ./
 
 ##################################################
