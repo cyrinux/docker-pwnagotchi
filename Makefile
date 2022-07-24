@@ -10,9 +10,11 @@ M4 := $(shell command -v m4 2>/dev/null)
 DISTDIR := ./dist
 DOCKERFILE_TEMPLATE := ./Dockerfile.m4
 
-IMAGE_REGISTRY := docker.io
-IMAGE_NAMESPACE := hectorm
-IMAGE_PROJECT := pwnagotchi
+include .envrc
+IMAGE_REGISTRY ?= docker.io
+IMAGE_NAMESPACE ?= hectorm
+IMAGE_PROJECT ?= pwnagotchi
+
 IMAGE_NAME := $(IMAGE_REGISTRY)/$(IMAGE_NAMESPACE)/$(IMAGE_PROJECT)
 ifeq ($(shell '$(GIT)' status --porcelain 2>/dev/null),)
 	IMAGE_GIT_TAG := $(shell '$(GIT)' tag --list --contains HEAD 2>/dev/null)
