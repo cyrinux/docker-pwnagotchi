@@ -266,7 +266,7 @@ get_target_arch() {
 }
 
 while [ $# -gt 0 ]; do
-	imageTag="$1"
+	imageTag="${1#docker.io/}"
 	shift
 	image="${imageTag%%[:@]*}"
 	imageTag="${imageTag#*:}"
