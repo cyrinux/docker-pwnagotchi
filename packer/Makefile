@@ -10,7 +10,7 @@ IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
 PWNAGOTCHI_NAME ?= pwnagotchi
 PACKER_WORK_DIR := ./
 PACKER_CACHE_DIR := ./packer_cache/
-PACKER_ARMHF_OUT := ./dist/armhf/pwnagotchi-'$(PWNAGOTCHI_NAME)'.img
+PACKER_ARMHF_OUT := ./dist/armhf/disk-$(PWNAGOTCHI_NAME).img
 
 ifneq ($(SUDO_USER),)
 	export HOME := $(shell getent passwd "$(SUDO_USER)" | cut -d: -f6)
@@ -38,9 +38,9 @@ init:
 	'$(PACKER)' init '$(PACKER_WORK_DIR)'
 
 $(PACKER_ARMHF_OUT):
-	@echo will make '$(PWNAGOTCHI_NAME)' ...
+	@echo Will make pwnagotchi '$(PWNAGOTCHI_NAME)'
 	mkdir -p '$(dir $(PACKER_ARMHF_OUT))'
-	sudo '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' '$(PACKER_WORK_DIR)'
+	sudo '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
 	'$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
 ##################################################
