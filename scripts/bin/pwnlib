@@ -12,7 +12,9 @@ fi
 
 # Starts monitor interface
 start_monitor_interface() {
-	rfkill unblock all
+	if type rfkill > /dev/null 2>&1; then
+		rfkill unblock all
+	fi
 	if ! exists_dev_interface "${PWNAGOTCHI_IFACE_MON:?}"; then
 		if exists_phy_interface "${PWNAGOTCHI_IFACE_NET:?}"; then
 			iw phy "${PWNAGOTCHI_IFACE_NET:?}" interface add "${PWNAGOTCHI_IFACE_MON:?}" type monitor
