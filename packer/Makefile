@@ -6,13 +6,11 @@ SHELL := /bin/sh
 PACKER := $(shell command -v packer 2>/dev/null)
 QEMU_IMG := $(shell command -v qemu-img 2>/dev/null)
 
-include ../.envrc
-
 IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
+PWNAGOTCHI_NAME ?= pwnagotchi
 PACKER_WORK_DIR := ./
 PACKER_CACHE_DIR := ./packer_cache/
-PACKER_ARMHF_OUT := ./dist/armhf/pwnagotchi.img
-
+PACKER_ARMHF_OUT := ./dist/armhf/pwnagotchi-'$(PWNAGOTCHI_NAME)'.img
 
 ifneq ($(SUDO_USER),)
 	export HOME := $(shell getent passwd "$(SUDO_USER)" | cut -d: -f6)
