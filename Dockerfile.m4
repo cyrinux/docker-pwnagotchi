@@ -329,6 +329,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		wireless-tools \
         bluetooth \
         bluez \
+        rfkill \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
