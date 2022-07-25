@@ -7,7 +7,8 @@ PACKER := $(shell command -v packer 2>/dev/null)
 QEMU_IMG := $(shell command -v qemu-img 2>/dev/null)
 
 include ../.envrc
-IMAGE_NAME ?= docker.io/hectorm/pwnagotchi
+
+IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
 PACKER_WORK_DIR := ./
 PACKER_CACHE_DIR := ./packer_cache/
 PACKER_ARMHF_OUT := ./dist/armhf/pwnagotchi.img
