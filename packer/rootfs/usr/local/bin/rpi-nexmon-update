@@ -54,11 +54,13 @@ cd "${NEXMON_SRCDIR:?}"
 # shellcheck disable=SC1091
 . ./setup_env.sh && make
 
-# Build and install firmware
+# Build and install firmware for rpi zero
 cd "${NEXMON_SRCDIR:?}"/patches/bcm43430a1/7_45_41_46/nexmon/
 make ./brcmfmac43430-sdio.bin
 install -Dm 644 ./brcmfmac43430-sdio.bin /lib/firmware/brcm/brcmfmac43430-sdio.bin
 curl -Lo /lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt "${BRCMFMAC_PI_ZERO_NVRAM_URL:?}"
+
+# Build and install firmware for rpi 4b
 cd "${NEXMON_SRCDIR:?}"/patches/bcm43455c0/7_45_206/nexmon/
 make ./brcmfmac43455-sdio.bin
 install -Dm 644 ./brcmfmac43455-sdio.bin /lib/firmware/brcm/brcmfmac43455-sdio.bin
