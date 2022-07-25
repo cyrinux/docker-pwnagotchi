@@ -38,6 +38,7 @@ init:
 	'$(PACKER)' init '$(PACKER_WORK_DIR)'
 
 $(PACKER_ARMHF_OUT):
+	@echo will make '$(PWNAGOTCHI_NAME)' ...
 	mkdir -p '$(dir $(PACKER_ARMHF_OUT))'
 	sudo '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' '$(PACKER_WORK_DIR)'
 	'$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
