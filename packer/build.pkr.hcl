@@ -60,7 +60,8 @@ build {
           i2c-tools \
           jq \
           openssh-server \
-          zstd
+          zstd \
+          golang
       EOF
       ,
       <<EOF
