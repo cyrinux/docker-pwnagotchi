@@ -66,7 +66,6 @@ build {
       ,
       <<EOF
         apt-get purge -y \
-          bluez \
           firmware-brcm80211 \
           nfs-common \
           raspberrypi-net-mods \

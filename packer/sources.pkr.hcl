@@ -1,5 +1,9 @@
-variables {
-  pwnagotchi_name = env("PWNAGOTCHI_NAME")
+variable "pwnagotchi_name" {
+  default = env("PWNAGOTCHI_NAME")
+}
+
+variable "cpu_type" {
+  default = env("CPU_TYPE")
 }
 
 source "arm-image" "armhf" {
@@ -9,8 +13,8 @@ source "arm-image" "armhf" {
   iso_checksum = "file:https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip.sha256"
 
   qemu_binary = "qemu-arm-static"
-  qemu_args   = ["-cpu", "arm1176"]
+  qemu_args   = ["-cpu", "${var.cpu_type}"]
 
-  output_filename   = "./dist/armhf/disk-${var.pwnagotchi_name}.img"
+  output_filename   = "./dist/armhf/disk-${var.pwnagotchi_name}-${var.cpu_type}.img"
   target_image_size = 7516192768
 }
