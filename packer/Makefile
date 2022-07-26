@@ -36,13 +36,13 @@ build-armhf: $(PACKER_ARMHF_OUT)
 
 .PHONY: init
 init:
-	'$(PACKER)' init '$(PACKER_WORK_DIR)'
+	'$(SUDO)' '$(PACKER)' init '$(PACKER_WORK_DIR)'
 
 $(PACKER_ARMHF_OUT):
 	@echo Will make pwnagotchi '$(PWNAGOTCHI_NAME)'
 	mkdir -p '$(dir $(PACKER_ARMHF_OUT))'
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
-	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
+	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' -var cpu_type='$(CPU_TYPE)' '$(PACKER_WORK_DIR)'
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
 	'$(SUDO)' '$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
