@@ -14,6 +14,10 @@ on:
     - cron: "20 04 1,15 * *"
   workflow_dispatch:
 
+concurrency:
+  group: "group: ${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:

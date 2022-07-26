@@ -6,62 +6,11 @@ m4_ifelse(m4_index(DEBIAN_IMAGE_NAME, [[rpi]]), [[-1]],
 )
 
 ##################################################
-## "projects" stage
-##################################################
-
-FROM --platform=${BUILDPLATFORM} docker.io/alpine:3 AS projects
-
-RUN apk add --no-cache ca-certificates curl git unzip
-
-# Download Nexmon
-ARG NEXMON_TREEISH=cea7c4b952b3e67110dc1032b8996dae0db9a857
-ARG NEXMON_REMOTE=https://github.com/hectorm/nexmon.git
-RUN mkdir /tmp/nexmon/
-WORKDIR /tmp/nexmon/
-RUN git clone "${NEXMON_REMOTE:?}" ./
-RUN git checkout "${NEXMON_TREEISH:?}"
-RUN git submodule update --init --recursive
-
-# Download Bettercap
-ARG BETTERCAP_TREEISH=v2.32.0
-ARG BETTERCAP_REMOTE=https://github.com/bettercap/bettercap.git
-RUN mkdir /tmp/bettercap/
-WORKDIR /tmp/bettercap/
-RUN git clone "${BETTERCAP_REMOTE:?}" ./
-RUN git checkout "${BETTERCAP_TREEISH:?}"
-RUN git submodule update --init --recursive
-
-# Download Bettercap UI
-ARG BETTERCAP_UI_VERSION=v1.3.0
-ARG BETTERCAP_UI_PKG_URL=https://github.com/bettercap/ui/releases/download/${BETTERCAP_UI_VERSION}/ui.zip
-RUN mkdir /tmp/bettercap/dist/
-WORKDIR /tmp/bettercap/dist/
-RUN curl -Lo ./ui.zip "${BETTERCAP_UI_PKG_URL:?}"
-RUN unzip -q ./ui.zip
-
-# Download PwnGRID
-ARG PWNGRID_TREEISH=v1.10.3
-ARG PWNGRID_REMOTE=https://github.com/evilsocket/pwngrid.git
-RUN mkdir /tmp/pwngrid/
-WORKDIR /tmp/pwngrid/
-RUN git clone "${PWNGRID_REMOTE:?}" ./
-RUN git checkout "${PWNGRID_TREEISH:?}"
-RUN git submodule update --init --recursive
-
-# Download Pwnagotchi
-ARG PWNAGOTCHI_TREEISH=ef0f35da0a4c7708a0e99dc0f75a4182efe328a5
-ARG PWNAGOTCHI_REMOTE=https://github.com/evilsocket/pwnagotchi.git
-RUN mkdir /tmp/pwnagotchi/
-WORKDIR /tmp/pwnagotchi/
-RUN git clone "${PWNAGOTCHI_REMOTE:?}" ./
-RUN git checkout "${PWNAGOTCHI_TREEISH:?}"
-RUN git submodule update --init --recursive
-
-##################################################
 ## "base" stage
 ##################################################
 
 FROM DEBIAN_IMAGE_NAME:DEBIAN_IMAGE_TAG AS base
+m4_ifdef([[CROSS_QEMU]], [[COPY --from=docker.io/hectorm/qemu-user-static:latest CROSS_QEMU CROSS_QEMU]])
 
 # Install base packages
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -156,7 +105,13 @@ m4_ifelse(IS_RASPIOS, 1, [[
 FROM build-base AS build-nexutil
 
 # Build Nexutil
-COPY --from=projects --chown=root:root /tmp/nexmon/ /tmp/nexmon/
+ARG NEXMON_TREEISH=cea7c4b952b3e67110dc1032b8996dae0db9a857
+ARG NEXMON_REMOTE=https://github.com/hectorm/nexmon.git
+RUN mkdir /tmp/nexmon/
+WORKDIR /tmp/nexmon/
+RUN git clone "${NEXMON_REMOTE:?}" ./
+RUN git checkout "${NEXMON_TREEISH:?}"
+RUN git submodule update --init --recursive
 WORKDIR /tmp/nexmon/utilities/nexutil/
 RUN make nexutil
 RUN mv ./nexutil /usr/local/bin/nexutil
@@ -181,9 +136,14 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Bettercap
-COPY --from=projects --chown=root:root /tmp/bettercap/ /tmp/bettercap/
-COPY ./patches/bettercap-*.patch /tmp/bettercap/
+ARG BETTERCAP_TREEISH=v2.32.0
+ARG BETTERCAP_REMOTE=https://github.com/bettercap/bettercap.git
+RUN mkdir /tmp/bettercap/
 WORKDIR /tmp/bettercap/
+RUN git clone "${BETTERCAP_REMOTE:?}" ./
+RUN git checkout "${BETTERCAP_TREEISH:?}"
+RUN git submodule update --init --recursive
+COPY ./patches/bettercap-*.patch ./
 RUN git apply -v ./bettercap-*.patch
 RUN go mod download -x
 RUN go build -v -o ./dist/bettercap ./
@@ -192,6 +152,16 @@ RUN mkdir -p /usr/local/share/bettercap/
 RUN mv ./dist/ui/ /usr/local/share/bettercap/ui/
 RUN file /usr/local/bin/bettercap
 RUN /usr/local/bin/bettercap --version
+
+# Install Bettercap UI
+ARG BETTERCAP_UI_VERSION=v1.3.0
+ARG BETTERCAP_UI_PKG_URL=https://github.com/bettercap/ui/releases/download/${BETTERCAP_UI_VERSION}/ui.zip
+RUN mkdir /tmp/bettercap-ui/
+WORKDIR /tmp/bettercap-ui/
+RUN wget -qO ./ui.zip "${BETTERCAP_UI_PKG_URL:?}"
+RUN unzip -q ./ui.zip -d ./
+RUN mkdir -p /usr/local/share/bettercap/
+RUN mv ./ui/ /usr/local/share/bettercap/ui/
 
 ##################################################
 ## "build-pwngrid" stage
@@ -207,8 +177,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build PwnGRID
-COPY --from=projects --chown=root:root /tmp/pwngrid/ /tmp/pwngrid/
+ARG PWNGRID_TREEISH=v1.10.3
+ARG PWNGRID_REMOTE=https://github.com/evilsocket/pwngrid.git
+RUN mkdir /tmp/pwngrid/
 WORKDIR /tmp/pwngrid/
+RUN git clone "${PWNGRID_REMOTE:?}" ./
+RUN git checkout "${PWNGRID_TREEISH:?}"
+RUN git submodule update --init --recursive
 RUN go mod download -x
 RUN go build -v -o ./dist/pwngrid ./cmd/pwngrid/*.go
 RUN mv ./dist/pwngrid /usr/local/bin/pwngrid
@@ -266,8 +241,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Pwnagotchi
-COPY --from=projects --chown=root:root /tmp/pwnagotchi/ /tmp/pwnagotchi/
+ARG PWNAGOTCHI_TREEISH=a7aee8615aeeea5ceed442a0e9cef5038c0c126e
+ARG PWNAGOTCHI_REMOTE=https://github.com/evilsocket/pwnagotchi.git
+RUN mkdir /tmp/pwnagotchi/
 WORKDIR /tmp/pwnagotchi/
+RUN git clone "${PWNAGOTCHI_REMOTE:?}" ./
+RUN git checkout "${PWNAGOTCHI_TREEISH:?}"
+RUN git submodule update --init --recursive
 # Modify some hardcoded paths
 RUN sed -ri 's|^\s*(DefaultPath)\s*=.+$|\1 = "/root/"|' ./pwnagotchi/identity.py
 # Create virtual environment and install requirements
@@ -275,7 +255,7 @@ ENV PWNAGOTCHI_VENV=/usr/local/lib/pwnagotchi/
 ENV PWNAGOTCHI_ENABLE_INSTALLER=false
 COPY ./requirements.txt ./requirements.txt
 RUN python3 -m venv --symlinks "${PWNAGOTCHI_VENV:?}"
-RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install --upgrade pip==23.0.1
+RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install --upgrade pip
 RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install -r ./requirements.txt
 RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install ./
 RUN "${PWNAGOTCHI_VENV:?}"/bin/pwnagotchi --version
@@ -431,6 +411,14 @@ ENV PWNAGOTCHI_PERSONALITY_ASSOCIATE=true
 ENV PWNAGOTCHI_PERSONALITY_CHANNELS=[]
 ENV PWNAGOTCHI_ANDROID_MAC=3A:4B:5C:6D:7E:8F
 ENV PWNAGOTCHI_ANDROID_IP=192.168.44.44
+ENV PWNAGOTCHI_UPS_LITE_ENABLED=true
+ENV PWNAGOTCHI_WPASEC_API_KEY=""
+ENV PWNAGOTCHI_WPASEC_ENABLED=false
+ENV PWNAGOTCHI_ONLINEHASHCRACK_EMAIL=""
+ENV PWNAGOTCHI_ONLINEHASHCRACK_ENABLED=false
+ENV PWNAGOTCHI_PAW_GPS_ENABLED=true
+ENV PWNAGOTCHI_QUICKDIC_ENABLED=false
+
 
 STOPSIGNAL SIGRTMIN+3
 HEALTHCHECK --start-period=30s --interval=10s --timeout=5s --retries=1 CMD ["/usr/local/bin/container-healthcheck"]

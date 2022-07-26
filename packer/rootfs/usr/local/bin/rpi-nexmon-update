@@ -19,8 +19,10 @@ apt-get install -y \
 apt-mark hold firmware-brcm80211
 
 # Get kernel release
-KERNEL_VERSION="$(dpkg -L raspberrypi-kernel | grep -Pom1 '(?<=/lib/modules/)[0-9]+(\.[0-9]+)+\+(?=/)')"
-KERNEL_VERSION_MINOR="$(printf '%s' "${KERNEL_VERSION:?}" | grep -Pom1 '^[0-9]+\.[0-9]+')"
+KERNEL_VERSION_RPI_ZERO="$(dpkg -L raspberrypi-kernel | grep -Pom1 '(?<=/lib/modules/)[0-9]+(\.[0-9]+)+\+(?=/)')"
+KERNEL_VERSION_MINOR_RPI_ZERO="$(printf '%s' "${KERNEL_VERSION_RPI_ZERO:?}" | grep -Pom1 '^[0-9]+\.[0-9]+')"
+KERNEL_VERSION_RPI_4B="$(dpkg -L raspberrypi-kernel | grep /lib/modules | cut -d'/' -f4 | sort -u | head -4 | tail -1)"
+KERNEL_VERSION_MINOR_RPI_4B="$(printf '%s' "${KERNEL_VERSION_RPI_4B:?}" | grep -Pom1 '^[0-9]+\.[0-9]+')"
 
 # Create source directory
 if [ ! -e "${NEXMON_SRCDIR:?}" ]; then
@@ -61,19 +63,27 @@ cd "${NEXMON_SRCDIR:?}"
 # shellcheck disable=SC1091
 . ./setup_env.sh && make
 
-# Build and install firmware for rpi zero
-cd "${NEXMON_SRCDIR:?}"/patches/bcm43430a1/7_45_41_46/nexmon/
-make ./brcmfmac43430-sdio.bin
-install -Dm 644 ./brcmfmac43430-sdio.bin /lib/firmware/brcm/brcmfmac43430-sdio.bin
-curl -Lo /lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt "${BRCMFMAC_PI_ZERO_NVRAM_URL:?}"
-
-# Build and install firmware for rpi 4b
-cd "${NEXMON_SRCDIR:?}"/patches/bcm43455c0/7_45_206/nexmon/
-make ./brcmfmac43455-sdio.bin
-install -Dm 644 ./brcmfmac43455-sdio.bin /lib/firmware/brcm/brcmfmac43455-sdio.bin
-curl -Lo /lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt "${BRCMFMAC_PI_4B_NVRAM_URL:?}"
-make -C /lib/modules/"${KERNEL_VERSION:?}"/build M="${PWD:?}"/brcmfmac_"${KERNEL_VERSION_MINOR:?}".y-nexmon -j2
-install -Dm 644 ./brcmfmac_"${KERNEL_VERSION_MINOR:?}".y-nexmon/brcmfmac.ko /lib/modules/"${KERNEL_VERSION:?}"/kernel/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
+# Build and install firmware
+# if rpi4b
+if [ "$(uname -m)" = "armv7l" ]; then
+	cd "${NEXMON_SRCDIR:?}"/patches/bcm43455c0/7_45_206/nexmon/
+	make clean
+	make ./brcmfmac43455-sdio.bin
+	install -Dm 644 ./brcmfmac43455-sdio.bin /lib/firmware/brcm/brcmfmac43455-sdio.bin
+	make -C /lib/modules/"${KERNEL_VERSION_RPI_4B:?}"/build M="${PWD:?}"/brcmfmac_"${KERNEL_VERSION_MINOR_RPI_4B:?}".y-nexmon -j2
+	install -Dm 644 ./brcmfmac_"${KERNEL_VERSION_MINOR_RPI_4B:?}".y-nexmon/brcmfmac.ko /lib/modules/"${KERNEL_VERSION_RPI_4B:?}"/kernel/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
+	curl -Lo /lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt "${BRCMFMAC_PI_4B_NVRAM_URL:?}"
+else
+	# or we considere its a rpi zero
+	cd "${NEXMON_SRCDIR:?}"/patches/bcm43430a1/7_45_41_46/nexmon/
+	make clean
+	make ./brcmfmac43430-sdio.bin
+	install -Dm 644 ./brcmfmac43430-sdio.bin /lib/firmware/brcm/brcmfmac43430-sdio.bin
+	cd "${NEXMON_SRCDIR:?}"/patches/bcm43455c0/7_45_206/nexmon/
+	make -C /lib/modules/"${KERNEL_VERSION_RPI_ZERO:?}"/build M="${PWD:?}"/brcmfmac_"${KERNEL_VERSION_MINOR_RPI_ZERO:?}".y-nexmon -j2
+	install -Dm 644 ./brcmfmac_"${KERNEL_VERSION_MINOR_RPI_ZERO:?}".y-nexmon/brcmfmac.ko /lib/modules/"${KERNEL_VERSION_RPI_ZERO:?}"/kernel/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
+	curl -Lo /lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt "${BRCMFMAC_PI_ZERO_NVRAM_URL:?}"
+fi
 
 # Build and install nexutil
 cd "${NEXMON_SRCDIR:?}"/utilities/nexutil/

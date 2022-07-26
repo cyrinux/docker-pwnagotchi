@@ -7,11 +7,13 @@ PACKER := $(shell command -v packer 2>/dev/null)
 QEMU_IMG := $(shell command -v qemu-img 2>/dev/null)
 SUDO := $(shell command -v sudo 2>/dev/null)
 
-IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
-PWNAGOTCHI_NAME ?= pwnagotchi
+export IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
+export PWNAGOTCHI_NAME ?= pwnagotchi
+export CPU_TYPE ?= arm1176
+
 PACKER_WORK_DIR := ./
 PACKER_CACHE_DIR := ./packer_cache/
-PACKER_ARMHF_OUT := ./dist/armhf/disk-$(PWNAGOTCHI_NAME).img
+PACKER_ARMHF_OUT := ./dist/armhf/disk-$(PWNAGOTCHI_NAME)-$(CPU_TYPE).img
 
 ifneq ($(SUDO_USER),)
 	export HOME := $(shell getent passwd "$(SUDO_USER)" | cut -d: -f6)
@@ -36,14 +38,18 @@ build-armhf: $(PACKER_ARMHF_OUT)
 
 .PHONY: init
 init:
-	'$(PACKER)' init '$(PACKER_WORK_DIR)'
+	'$(SUDO)' '$(PACKER)' init '$(PACKER_WORK_DIR)'
 
 $(PACKER_ARMHF_OUT):
 	@echo Will make pwnagotchi '$(PWNAGOTCHI_NAME)'
 	mkdir -p '$(dir $(PACKER_ARMHF_OUT))'
+	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hostname.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
+	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hosts.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
-	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
+	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var cpu_type='$(CPU_TYPE)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
+	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
+	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
 	'$(SUDO)' '$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
 ##################################################
