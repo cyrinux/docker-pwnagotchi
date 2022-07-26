@@ -12,6 +12,6 @@ source "arm-image" "armhf" {
   qemu_binary = "qemu-arm-static"
   qemu_args   = ["-cpu", "${var.cpu_type}"]
 
-  output_filename   = "./dist/armhf/disk-${var.pwnagotchi_name}.img"
+  output_filename   = "./dist/armhf/disk-${var.pwnagotchi_name}-${var.cpu_type}.img"
   target_image_size = 7516192768
 }
