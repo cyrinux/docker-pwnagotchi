@@ -1,6 +1,6 @@
 /dist/
 /packer/rootfs/etc/pwnagotchi.env
-/packer/rootfs/etc/pwnagotchi.env
+/packer/rootfs/etc/hostname
 /packer/dist/
 /packer/packer_cache/
 /packer/crash.log
