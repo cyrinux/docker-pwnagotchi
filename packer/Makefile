@@ -5,6 +5,7 @@ SHELL := /bin/sh
 
 PACKER := $(shell command -v packer 2>/dev/null)
 QEMU_IMG := $(shell command -v qemu-img 2>/dev/null)
+SUDO := $(shell command -v sudo 2>/dev/null)
 
 IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
 PWNAGOTCHI_NAME ?= pwnagotchi
@@ -41,8 +42,8 @@ $(PACKER_ARMHF_OUT):
 	@echo Will make pwnagotchi '$(PWNAGOTCHI_NAME)'
 	mkdir -p '$(dir $(PACKER_ARMHF_OUT))'
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
-	sudo '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
-	'$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
+	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
+	'$(SUDO)' '$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
 ##################################################
 ## "clean" target
