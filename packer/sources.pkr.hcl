@@ -1,6 +1,6 @@
 variables {
   pwnagotchi_name = env("PWNAGOTCHI_NAME")
-  cpu_type = env("CPU_TYPE")
+  cpu_type        = env("CPU_TYPE")
 }
 
 source "arm-image" "armhf" {

@@ -55,7 +55,6 @@ personality.channels = ${PWNAGOTCHI_PERSONALITY_CHANNELS}
 
 # Bluetooth
 main.plugins.bt-tether.enabled = true
-
 main.plugins.bt-tether.devices.android-phone.enabled = true          # the name of this entry is android-phone
 main.plugins.bt-tether.devices.android-phone.search_order = 1         # in which order the devices should
                                                                       ## be searched. E.g. this is #1
@@ -80,3 +79,26 @@ main.plugins.bt-tether.devices.android-phone.share_internet = true   # set to tr
                                                                       ## internet via bluetooth
 main.plugins.bt-tether.devices.android-phone.priority = 1             # the device with the highest
                                                                      ## priority wins (1 = highest)
+
+main.plugins.quickdic.enabled = ${PWNAGOTCHI_QUICKDIC_ENABLED}
+main.plugins.quickdic.wordlist_folder = "/opt/wordlists/"
+
+main.plugins.aircrackonly.enabled = true
+main.plugins.hashie.enabled = true
+
+main.plugins.onlinehashcrack.enabled = ${PWNAGOTCHI_ONLINEHASHCRACK_ENABLED}
+main.plugins.onlinehashcrack.email = """${PWNAGOTCHI_ONLINEHASHCRACK_EMAIL}"""
+main.plugins.onlinehashcrack.dashboard = ""
+main.plugins.onlinehashcrack.single_files = false
+main.plugins.onlinehashcrack.whitelist = []
+
+main.plugins.wpa-sec.enabled = ${PWNAGOTCHI_WPASEC_ENABLED}
+main.plugins.wpa-sec.api_key = """${PWNAGOTCHI_WPASEC_API_KEY}"""
+main.plugins.wpa-sec.api_url = "https://wpa-sec.stanev.org"
+main.plugins.wpa-sec.download_results = true
+main.plugins.wpa-sec.whitelist = []
+
+main.plugins.paw-gps.enabled = ${PWNAGOTCHI_PAW_GPS_ENABLED}
+main.plugins.paw-gps.ip = "192.168.44.1"
+
+main.plugins.ups_lite.enabled = ${PWNAGOTCHI_UPS_LITE_ENABLED}

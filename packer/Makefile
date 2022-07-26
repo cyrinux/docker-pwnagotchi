@@ -9,9 +9,11 @@ SUDO := $(shell command -v sudo 2>/dev/null)
 
 IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
 PWNAGOTCHI_NAME ?= pwnagotchi
+CPU_TYPE ?= arm1176
+
 PACKER_WORK_DIR := ./
 PACKER_CACHE_DIR := ./packer_cache/
-PACKER_ARMHF_OUT := ./dist/armhf/disk-$(PWNAGOTCHI_NAME).img
+PACKER_ARMHF_OUT := ./dist/armhf/disk-$(PWNAGOTCHI_NAME)-$(CPU_TYPE).img
 
 ifneq ($(SUDO_USER),)
 	export HOME := $(shell getent passwd "$(SUDO_USER)" | cut -d: -f6)
