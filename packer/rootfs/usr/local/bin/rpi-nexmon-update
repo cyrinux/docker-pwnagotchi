@@ -3,10 +3,12 @@
 set -eu
 
 NEXMON_TREEISH='cea7c4b952b3e67110dc1032b8996dae0db9a857'
-NEXMON_REMOTE='https://github.com/hectorm/nexmon.git'
+NEXMON_REMOTE='https://github.com/cyrinux/nexmon.git'
 NEXMON_SRCDIR='/usr/local/src/nexmon/'
-BRCMFMAC_PI_ZERO_NVRAM_URL='https://raw.githubusercontent.com/openwrt/cypress-nvram/de707b6d535e566479c2ed3e1d09ae5393aa7db3/brcmfmac43430-sdio.raspberrypi%2Cmodel-zero-w.txt'
-BRCMFMAC_PI_4B_NVRAM_URL='https://raw.githubusercontent.com/openwrt/cypress-nvram/de707b6d535e566479c2ed3e1d09ae5393aa7db3/brcmfmac43455-sdio.raspberrypi%2C4-model-b.txt'
+OPENWRT_TREEISH='de707b6d535e566479c2ed3e1d09ae5393aa7db3'
+BRCMFMAC_RPI_ZERO_NVRAM_URL="https://raw.githubusercontent.com/openwrt/cypress-nvram/${OPENWRT_TREEISH}/brcmfmac43430-sdio.raspberrypi%2Cmodel-zero-w.txt"
+BRCMFMAC_RPI_4B_NVRAM_URL="https://raw.githubusercontent.com/openwrt/cypress-nvram/${OPENWRT_TREEISH}/brcmfmac43455-sdio.raspberrypi%2C4-model-b.txt"
+BRCMFMAC_RPI_3B_NVRAM_URL="https://raw.githubusercontent.com/openwrt/cypress-nvram/${OPENWRT_TREEISH}/brcmfmac43455-sdio.raspberrypi%2C3-model-b-plus.txt"
 
 # Install dependencies
 apt-get update
@@ -57,7 +59,7 @@ cd "${NEXMON_SRCDIR:?}"
 . ./setup_env.sh && make
 
 # Build and install firmware
-# if rpi4b
+# add support for rpi 4b
 if [ "$(uname -m)" = "armv7l" ]; then
 	cd "${NEXMON_SRCDIR:?}"/patches/bcm43455c0/7_45_206/nexmon/
 	make clean
@@ -65,9 +67,9 @@ if [ "$(uname -m)" = "armv7l" ]; then
 	install -Dm 644 ./brcmfmac43455-sdio.bin /lib/firmware/brcm/brcmfmac43455-sdio.bin
 	make -C /lib/modules/"${KERNEL_VERSION_RPI_4B:?}"/build M="${PWD:?}"/brcmfmac_"${KERNEL_VERSION_MINOR_RPI_4B:?}".y-nexmon -j2
 	install -Dm 644 ./brcmfmac_"${KERNEL_VERSION_MINOR_RPI_4B:?}".y-nexmon/brcmfmac.ko /lib/modules/"${KERNEL_VERSION_RPI_4B:?}"/kernel/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
-	curl -Lo /lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt "${BRCMFMAC_PI_4B_NVRAM_URL:?}"
+	curl -Lo /lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt "${BRCMFMAC_RPI_4B_NVRAM_URL:?}"
 else
-	# or we considere its a rpi zero
+	# or add support for rpi 3b and rpi zero
 	cd "${NEXMON_SRCDIR:?}"/patches/bcm43430a1/7_45_41_46/nexmon/
 	make clean
 	make ./brcmfmac43430-sdio.bin
@@ -75,7 +77,8 @@ else
 	cd "${NEXMON_SRCDIR:?}"/patches/bcm43455c0/7_45_206/nexmon/
 	make -C /lib/modules/"${KERNEL_VERSION_RPI_ZERO:?}"/build M="${PWD:?}"/brcmfmac_"${KERNEL_VERSION_MINOR_RPI_ZERO:?}".y-nexmon -j2
 	install -Dm 644 ./brcmfmac_"${KERNEL_VERSION_MINOR_RPI_ZERO:?}".y-nexmon/brcmfmac.ko /lib/modules/"${KERNEL_VERSION_RPI_ZERO:?}"/kernel/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
-	curl -Lo /lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt "${BRCMFMAC_PI_ZERO_NVRAM_URL:?}"
+	curl -Lo /lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt "${BRCMFMAC_RPI_ZERO_NVRAM_URL:?}"
+	curl -Lo /lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt "${BRCMFMAC_RPI_3B_NVRAM_URL:?}"
 fi
 
 # Build and install nexutil
