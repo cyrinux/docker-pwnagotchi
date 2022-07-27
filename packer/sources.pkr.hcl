@@ -1,6 +1,9 @@
-variables {
-  pwnagotchi_name = "{{env `PWNAGOTCHI_NAME`}}"
-  cpu_type        = "{{env `CPU_TYPE`}}"
+variable "pwnagotchi_name" {
+  default = env("PWNAGOTCHI_NAME")
+}
+
+variable "cpu_type" {
+  default = env("CPU_TYPE")
 }
 
 source "arm-image" "armhf" {
