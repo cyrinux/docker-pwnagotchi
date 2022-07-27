@@ -46,11 +46,14 @@ $(PACKER_ARMHF_OUT):
 	mkdir -p '$(dir $(PACKER_ARMHF_OUT))'
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hostname.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
 	cat '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
+	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hosts.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
+	cat '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
 	cat '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
 		'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var image_name='$(IMAGE_NAME)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' -var cpu_type='$(CPU_TYPE)' '$(PACKER_WORK_DIR)'
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
+	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
 	'$(SUDO)' '$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
 ##################################################
