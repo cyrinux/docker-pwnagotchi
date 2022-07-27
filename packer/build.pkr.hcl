@@ -71,7 +71,11 @@ build {
           raspberrypi-net-mods \
           triggerhappy \
           unattended-upgrades \
-          wpasupplicant
+          wpasupplicant \
+          libraspberrypi0 \
+          libraspberrypi-dev \
+          libraspberrypi-doc \
+          libraspberrypi-bin
         apt-get autoremove -y
       EOF
       ,
