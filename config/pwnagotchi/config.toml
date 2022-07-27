@@ -98,6 +98,7 @@ main.plugins.wpa-sec.api_url = "https://wpa-sec.stanev.org"
 main.plugins.wpa-sec.download_results = true
 main.plugins.wpa-sec.whitelist = []
 
+main.plugins.webgpsmap.enabled = ${PWNAGOTCHI_WEBGPSMAP_ENABLED}
 main.plugins.paw-gps.enabled = ${PWNAGOTCHI_PAW_GPS_ENABLED}
 main.plugins.paw-gps.ip = "192.168.44.1"
 
