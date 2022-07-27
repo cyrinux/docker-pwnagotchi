@@ -330,6 +330,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         bluetooth \
         bluez \
         rfkill \
+        aircrack-ng \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -380,6 +381,9 @@ RUN sed -i 's/bluetoothd/bluetoothd --noplugin=sap/' /lib/systemd/system/bluetoo
 RUN find /etc/systemd/system/ -type f -regex '.+\.\(target\|service\)' -not -perm 0644 -exec chmod 0644 '{}' ';'
 RUN systemctl set-default container.target
 RUN systemctl enable bettercap.service pwnagotchi.service pwngrid.service bluetooth.service
+
+# Add dictionnary
+ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
 
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
