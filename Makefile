@@ -10,10 +10,10 @@ M4 := $(shell command -v m4 2>/dev/null)
 DISTDIR := ./dist
 DOCKERFILE_TEMPLATE := ./Dockerfile.m4
 
-IMAGE_REGISTRY ?= docker.io
-IMAGE_NAMESPACE ?= cyrinux
-IMAGE_PROJECT ?= pwnagotchi
-IMAGE_NAME ?= $(IMAGE_REGISTRY)/$(IMAGE_NAMESPACE)/$(IMAGE_PROJECT)
+export IMAGE_REGISTRY ?= docker.io
+export IMAGE_NAMESPACE ?= cyrinux
+export IMAGE_PROJECT ?= pwnagotchi
+export IMAGE_NAME ?= $(IMAGE_REGISTRY)/$(IMAGE_NAMESPACE)/$(IMAGE_PROJECT)
 
 IMAGE_GIT_TAG := $(shell '$(GIT)' tag -l --contains HEAD 2>/dev/null)
 IMAGE_GIT_SHA := $(shell '$(GIT)' rev-parse HEAD 2>/dev/null)
