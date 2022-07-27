@@ -1,5 +1,5 @@
 variables {
-  image_name = env("IMAGE_NAME")
+  image_name = "{{env `IMAGE_NAME`}}"
 }
 
 build {
