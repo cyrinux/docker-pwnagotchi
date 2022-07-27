@@ -1,5 +1,5 @@
-variable "image_name" {
-  default = env("IMAGE_NAME")
+variables {
+  image_name = env("IMAGE_NAME")
 }
 
 build {
