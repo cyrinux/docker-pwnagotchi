@@ -94,7 +94,10 @@ build {
           apt-daily-upgrade.timer \
           apt-daily.timer \
           dhcpcd.service \
-          fake-hwclock.service
+          fake-hwclock.service \
+          bluetooth.service
+        systemctl mask \
+          bluetooth.service
         systemctl enable \
           dnsmasq.service \
           docker.service \

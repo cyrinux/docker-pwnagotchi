@@ -380,7 +380,7 @@ COPY --chown=root:root ./scripts/service/ /etc/systemd/system/
 RUN sed -i 's/bluetoothd/bluetoothd --noplugin=sap/' /lib/systemd/system/bluetooth.service
 RUN find /etc/systemd/system/ -type f -regex '.+\.\(target\|service\)' -not -perm 0644 -exec chmod 0644 '{}' ';'
 RUN systemctl set-default container.target
-RUN systemctl enable bettercap.service pwnagotchi.service pwngrid.service bluetooth.service
+RUN systemctl enable bluetooth.service bettercap.service pwnagotchi.service pwngrid.service
 
 # Add dictionnary
 ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
