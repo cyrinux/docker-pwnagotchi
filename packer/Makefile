@@ -46,7 +46,7 @@ $(PACKER_ARMHF_OUT):
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hostname.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hosts.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
-	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf '$(PACKER_WORK_DIR)'
+	'$(SUDO)' '$(PACKER)' build -force -only=arm-image.armhf -var cpu_type='$(CPU_TYPE)' -var pwnagotchi_name='$(PWNAGOTCHI_NAME)' '$(PACKER_WORK_DIR)'
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
