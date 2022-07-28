@@ -333,6 +333,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         bluez \
         rfkill \
         aircrack-ng \
+		git \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
