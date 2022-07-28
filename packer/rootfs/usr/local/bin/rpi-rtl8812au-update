@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -eu
+
+if [ "$(uname -m)" = "armv7l" ]; then
+	RTL8812AU_TREEISH='v5.6.4.2'
+	RTL8812AU_REMOTE='https://github.com/aircrack-ng/rtl8812au.git'
+	RTL8812AU_SRCDIR='/usr/local/src/rtl8812au/'
+
+	# Install dependencies
+	apt-get update
+	apt-get install -y \
+		autoconf automake automake-1.15 bison build-essential flex gawk git libtool-bin pkgconf \
+		debianutils libfl-dev libgmp-dev libgmp3-dev qpdf texinfo \
+		raspberrypi-kernel raspberrypi-kernel-headers
+
+	# Get kernel release
+	KVER="$(dpkg -L raspberrypi-kernel | grep /lib/modules | cut -d'/' -f4 | sort -u | head -4 | tail -1)"
+	export KVER
+	KSRC="/lib/modules/${KVER}/build"
+	export KSRC
+
+	# Create source directory
+	rm -rf "${RTL8812AU_SRCDIR:?}"
+	mkdir -p "${RTL8812AU_SRCDIR:?}"
+
+	# Clone project
+	cd "${RTL8812AU_SRCDIR:?}"
+	git clone "${RTL8812AU_REMOTE:?}" ./
+	git checkout "${RTL8812AU_TREEISH:?}"
+
+	# Build
+	cd "${RTL8812AU_SRCDIR:?}"
+
+	sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
+	sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
+	sed -i 's/^MAKE="/MAKE="ARCH=arm\ /' dkms.conf
+	export ARCH="arm"
+	make -j2 && make install
+fi
