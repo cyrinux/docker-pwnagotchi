@@ -65,6 +65,12 @@ build {
       EOF
       ,
       <<EOF
+        apt-get install -y \
+          python3-rpi.gpio python-imaging \
+          python-smbus python-dev
+      EOF
+      ,
+      <<EOF
         apt-get purge -y \
           firmware-brcm80211 \
           nfs-common \
