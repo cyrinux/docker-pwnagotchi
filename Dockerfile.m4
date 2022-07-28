@@ -368,6 +368,9 @@ COPY --from=build-pwngrid --chown=root:root /usr/local/bin/pwngrid /usr/local/bi
 COPY --from=build-pwnagotchi --chown=root:root /usr/local/lib/pwnagotchi/ /usr/local/lib/pwnagotchi/
 RUN ln -s /usr/local/lib/pwnagotchi/bin/pwnagotchi /usr/local/bin/pwnagotchi
 
+# Add Pwnagotchi plugins
+RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git /usr/local/share/pwnagotchi/availaible-plugins
+
 # Copy Pwnagotchi config
 COPY --chown=root:root ./config/pwnagotchi/ /etc/pwnagotchi/
 RUN find /etc/pwnagotchi/ -type d -not -perm 0755 -exec chmod 0755 '{}' ';'
