@@ -66,8 +66,10 @@ build {
       ,
       <<EOF
         apt-get install -y \
-          python3-rpi.gpio python-imaging \
-          python-smbus python-dev
+          python3-rpi.gpio python3-pip \
+          python-smbus python-dev \
+          libopenjp2-7 \
+          && pip3 install Pillow==8.2.0
       EOF
       ,
       <<EOF
