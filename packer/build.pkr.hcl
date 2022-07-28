@@ -88,18 +88,17 @@ build {
       EOF
       ,
       <<EOF
+        rpi-rtl8812au-update
+        rpi-nexmon-update
+      EOF
+      ,
+      <<EOF
         curl --proto '=https' --tlsv1.3 -sSf 'https://download.docker.com/linux/raspbian/gpg' | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
         printf '%s\n' "deb [arch=armhf signed-by=/etc/apt/trusted.gpg.d/docker.gpg] https://download.docker.com/linux/raspbian/ $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
         apt-get update && apt-get install -y docker-ce
       EOF
       ,
       <<EOF
-        rpi-nexmon-update
-        rm -rf /usr/local/src/nexmon/
-      EOF
-      ,
-      <<EOF
-        systemctl set-default multi-user.target
         systemctl disable \
           apt-daily-upgrade.timer \
           apt-daily.timer \
@@ -125,7 +124,7 @@ build {
       ,
       <<EOF
         rm -f /etc/ssh/ssh_host_*key*
-        find /var/lib/apt/lists/ -mindepth 1 -delete; apt-get clean
+        find /var/lib/apt/lists/ -mindepth 1 -delete
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
         find /tmp/ /var/tmp/ -ignore_readdir_race -mindepth 1 -delete ||:
       EOF
