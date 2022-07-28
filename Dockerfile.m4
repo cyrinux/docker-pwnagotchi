@@ -324,6 +324,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		openmpi-bin \
 		python3 \
 		python3-distutils \
+        python3-smbus \
 		systemd \
 		tcpdump \
 		wireless-tools \
