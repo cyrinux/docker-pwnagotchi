@@ -237,6 +237,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		libvpx-dev \
 		libwebp-dev \
 		libzstd-dev \
+		python3-smbus \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper-dev]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -259,6 +260,7 @@ RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install --upgrade pip
 RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install -r ./requirements.txt
 RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install ./
 RUN "${PWNAGOTCHI_VENV:?}"/bin/pwnagotchi --version
+RUN cp /usr/lib/python3/dist-packages/smbus* "${PWNAGOTCHI_VENV:?}"/lib/python3.7/site-packages/
 
 ##################################################
 ## "main" stage
@@ -326,7 +328,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		openmpi-bin \
 		python3 \
 		python3-distutils \
-        python3-smbus \
 		systemd \
 		tcpdump \
 		wireless-tools \
