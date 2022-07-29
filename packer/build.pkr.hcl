@@ -61,7 +61,8 @@ build {
           jq \
           openssh-server \
           zstd \
-          golang
+          golang \
+          bc
       EOF
       ,
       <<EOF

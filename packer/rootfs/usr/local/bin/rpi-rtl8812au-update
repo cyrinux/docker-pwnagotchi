@@ -3,8 +3,9 @@
 set -eu
 
 if [ "$(uname -m)" = "armv7l" ]; then
-	RTL8812AU_TREEISH='v5.6.4.2'
+	RTL8812AU_TREEISH='main'
 	RTL8812AU_REMOTE='https://github.com/aircrack-ng/rtl8812au.git'
+	RTL8812AU_REMOTE='https://github.com/morrownr/8812au-20210629.git'
 	RTL8812AU_SRCDIR='/usr/local/src/rtl8812au/'
 
 	# Install dependencies
@@ -32,11 +33,13 @@ if [ "$(uname -m)" = "armv7l" ]; then
 	# Build
 	cd "${RTL8812AU_SRCDIR:?}"
 
-	sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
-	sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
-	sed -i 's/^MAKE="/MAKE="ARCH=arm\ /' dkms.conf
-	export ARCH="arm"
-	make -j2 && make install
+	# sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
+	# sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
+	# sed -i 's/^MAKE="/MAKE="ARCH=arm\ /' dkms.conf
+	# export ARCH="arm"
+	# make -j2 && make install
+	./ARM_RPI.sh
+	./install-driver-no-dkms.sh NoPrompt
 else
 	echo "Only arm64 arch is supported"
 fi
