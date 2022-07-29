@@ -37,4 +37,6 @@ if [ "$(uname -m)" = "armv7l" ]; then
 	sed -i 's/^MAKE="/MAKE="ARCH=arm\ /' dkms.conf
 	export ARCH="arm"
 	make -j2 && make install
+else
+	echo "Only arm64 arch is supported"
 fi
