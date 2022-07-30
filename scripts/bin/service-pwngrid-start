@@ -11,7 +11,7 @@ if [ ! -f /root/id_rsa ]; then
 fi
 
 exec pwngrid \
-		-address 127.0.0.1:8666 \
-		-keys /root/ \
-		-iface "${PWNAGOTCHI_IFACE_MON:?}" \
-		-client-token /root/.api-enrollment.json
+	-address 127.0.0.1:8666 \
+	-keys /root/ \
+	-iface "${PWNAGOTCHI_IFACE_NET:?}" \
+	-client-token /root/.api-enrollment.json

@@ -1,7 +1,7 @@
 # Main
 main.name = "${PWNAGOTCHI_NAME}"
 main.lang = "${PWNAGOTCHI_LANG}"
-main.iface = "${PWNAGOTCHI_IFACE_MON}"
+main.iface = "${PWNAGOTCHI_IFACE_NET}"
 main.mon_max_blind_epochs = ${PWNAGOTCHI_MAX_BLIND_EPOCHS}
 main.whitelist = ${PWNAGOTCHI_WHITELIST}
 main.filter = "${PWNAGOTCHI_FILTER}"
@@ -35,7 +35,7 @@ main.plugins.webcfg.enabled = false
 ui.web.enabled = ${PWNAGOTCHI_WEB_ENABLED}
 ui.web.address = "${PWNAGOTCHI_WEB_ADDRESS}"
 ui.web.username = "${PWNAGOTCHI_USERNAME}"
-ui.web.password = """${PWNAGOTCHI_PASSWORD}"""
+ui.web.password = "${PWNAGOTCHI_PASSWORD}"
 
 # Display UI
 ui.display.enabled = ${PWNAGOTCHI_DISPLAY_ENABLED}
@@ -44,7 +44,7 @@ ui.display.type = "${PWNAGOTCHI_DISPLAY_TYPE}"
 
 # Bettercap
 bettercap.username = "${PWNAGOTCHI_USERNAME}"
-bettercap.password = """${PWNAGOTCHI_PASSWORD}"""
+bettercap.password = "${PWNAGOTCHI_PASSWORD}"
 
 # Personality
 personality.advertise = ${PWNAGOTCHI_PERSONALITY_ADVERTISE}
