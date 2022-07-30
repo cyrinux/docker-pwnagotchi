@@ -33,14 +33,11 @@ start_monitor_interface() {
 	fi
 
 	if [ "${PWNAGOTCHI_IFACE_MON}" = "${PWNAGOTCHI_IFACE_NET}" ]; then
-		if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_NET:?}"; then
-			iw "${PWNAGOTCHI_IFACE_NET}" set monitor control
-			ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
-		fi
-	else
-		if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_MON:?}"; then
-			ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
-		fi
+		iw "${PWNAGOTCHI_IFACE_NET}" set monitor control
+	fi
+
+	if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_NET:?}"; then
+		ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
 	fi
 }
 
