@@ -10,8 +10,14 @@ if [ -f /etc/profile.d/env.sh ]; then
 	. /etc/profile.d/env.sh
 fi
 
+# Disable builtin wifi
+# if [ ! grep -q disable-wifi /boot/config.txt ]; then
+# 	echo "dtoverlay=disable-wifi" >> /boot/config.txt
+# 	reboot
+# fi
+
 # Starts monitor interface
-start_monitor_interface_patched() {
+start_monitor_interface() {
 	if type rfkill > /dev/null 2>&1; then
 		rfkill unblock all
 	fi

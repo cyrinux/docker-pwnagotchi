@@ -11,10 +11,10 @@ m4_ifelse(m4_index(DEBIAN_IMAGE_NAME, [[rpi]]), [[-1]],
 
 FROM DEBIAN_IMAGE_NAME:DEBIAN_IMAGE_TAG AS base
 m4_ifdef([[CROSS_QEMU]], [[COPY --from=docker.io/hectorm/qemu-user-static:latest CROSS_QEMU CROSS_QEMU]])
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install base packages
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		ca-certificates \
 		locales \
@@ -36,10 +36,9 @@ RUN printf '%s\n' "${TZ:?}" > /etc/timezone \
 ##################################################
 
 FROM base AS build-base
-
+ENV DEBIAN_FRONTEND=noninteractive
 # Install build packages
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		build-essential \
 		cmake \
@@ -56,10 +55,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 ##################################################
 
 FROM build-base AS build-python
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Python
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		cython3 \
 		python3 \
@@ -125,10 +124,10 @@ RUN /usr/local/bin/nexutil --version
 ##################################################
 
 FROM build-golang AS build-bettercap
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		libnetfilter-queue-dev \
 		libpcap-dev \
@@ -168,10 +167,10 @@ RUN mv ./ui/ /usr/local/share/bettercap/ui/
 ##################################################
 
 FROM build-golang AS build-pwngrid
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		libpcap-dev \
 	&& rm -rf /var/lib/apt/lists/*
@@ -195,10 +194,10 @@ RUN /usr/local/bin/pwngrid --version
 ##################################################
 
 FROM build-python AS build-pwnagotchi
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		fonts-dejavu \
 		gfortran \
@@ -269,10 +268,10 @@ RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git "${PW
 ##################################################
 
 FROM base AS main
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system packages
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		fbi \
 		fonts-dejavu \
