@@ -3,6 +3,8 @@ variable "image_name" {
 }
 
 build {
+  name = "main"
+
   sources = [
     "source.arm-image.armhf"
   ]

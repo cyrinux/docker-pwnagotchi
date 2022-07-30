@@ -11,11 +11,11 @@ if [ -f /etc/profile.d/env.sh ]; then
 fi
 
 # Starts monitor interface
-start_monitor_interface() {
+start_monitor_interface_patched() {
 	if type rfkill > /dev/null 2>&1; then
 		rfkill unblock all
 	fi
-	if ! exists_dev_interface "${PWNAGOTCHI_IFACE_MON:?}"; then
+	if ! exists_dev_interface "${PWNAGOTCHI_IFACE_MON:?}" && [ "${PWNAGOTCHI_IFACE_MON}" != "${PWNAGOTCHI_IFACE_NET}" ]; then
 		if exists_phy_interface "${PWNAGOTCHI_IFACE_NET:?}"; then
 			iw phy "${PWNAGOTCHI_IFACE_NET:?}" interface add "${PWNAGOTCHI_IFACE_MON:?}" type monitor
 		elif exists_dev_interface "${PWNAGOTCHI_IFACE_NET:?}"; then
@@ -25,8 +25,16 @@ start_monitor_interface() {
 			exit 1
 		fi
 	fi
-	if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_MON:?}"; then
-		ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
+
+	if [ "${PWNAGOTCHI_IFACE_MON}" = "${PWNAGOTCHI_IFACE_NET}" ]; then
+		if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_NET:?}"; then
+			iw "${PWNAGOTCHI_IFACE_NET}" set monitor control
+			ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
+		fi
+	else
+		if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_MON:?}"; then
+			ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
+		fi
 	fi
 }
 

@@ -25,11 +25,11 @@ if [ -w /usr/local/share/bettercap/caplets/pwnagotchi-manual.cap ]; then
 	envsubst2 -i inplace /usr/local/share/bettercap/caplets/pwnagotchi-manual.cap
 fi
 
-# Disable nexutil tool if Realtek usb present
-toggle_nexutil
-
 # Start monitor interface
 start_monitor_interface
+
+# Disable nexutil tool if Realtek usb present
+toggle_nexutil
 
 if is_auto_mode 'no_delete'; then
 	exec bettercap -no-colors -caplet pwnagotchi-auto -iface "${PWNAGOTCHI_IFACE_MON:?}"
