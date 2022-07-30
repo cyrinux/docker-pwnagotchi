@@ -1,6 +1,9 @@
 #!/bin/bash
 
-IS_REALTEK="$(lsusb | grep -q Realtek)"
+IS_REALTEK="$(
+    lsusb | grep -q Realtek
+    echo $?
+)"
 
 if [ "$IS_REALTEK" = 0 ]; then
     reload-8821au-driver
