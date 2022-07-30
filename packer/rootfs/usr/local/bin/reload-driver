@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ARCH=$(dpkg --print-architecture)
+IS_REALTEK="$(lsusb | grep -q Realtek)"
 
-if [ "$ARCH" = "armv7l" ]; then
+if [ "$IS_REALTEK" = 0 ]; then
     reload-8821au-driver
 else
     reload-brcmfmac-driver
