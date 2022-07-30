@@ -5,6 +5,18 @@ set -eu
 # shellcheck source=./pwnlib
 . /usr/local/bin/pwnlib
 
+NEXUTIL="/usr/local/bin/nexutil"
+IS_REALTEK="$(lsusb | grep -q Realtek)"
+
+toggle_nexutil() {
+	if [ "$IS_REALTEK" = 0 ] && [ -f "$NEXUTIL" ]; then
+		mv $NEXUTIL $NEXUTIL.disable
+	fi
+	if [ "$IS_REALTEK" = 1 ] && [ -f "$NEXUTIL.disable" ]; then
+		mv $NEXUTIL.disable $NEXUTIL
+	fi
+}
+
 # Replace environment variables in the Bettercap caplets
 if [ -w /usr/local/share/bettercap/caplets/pwnagotchi-auto.cap ]; then
 	envsubst2 -i inplace /usr/local/share/bettercap/caplets/pwnagotchi-auto.cap
@@ -12,6 +24,9 @@ fi
 if [ -w /usr/local/share/bettercap/caplets/pwnagotchi-manual.cap ]; then
 	envsubst2 -i inplace /usr/local/share/bettercap/caplets/pwnagotchi-manual.cap
 fi
+
+# Disable nexutil tool if Realtek usb present
+toggle_nexutil
 
 # Start monitor interface
 start_monitor_interface
