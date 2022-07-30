@@ -242,8 +242,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Pwnagotchi
-ARG PWNAGOTCHI_TREEISH=a7aee8615aeeea5ceed442a0e9cef5038c0c126e
-ARG PWNAGOTCHI_REMOTE=https://github.com/evilsocket/pwnagotchi.git
+ARG PWNAGOTCHI_TREEISH=5d8c000440ffb2e86e4b33e1e096eaf7e56d8415
+ARG PWNAGOTCHI_REMOTE=https://github.com/DrSchottky/pwnagotchi.git
 RUN mkdir /tmp/pwnagotchi/
 WORKDIR /tmp/pwnagotchi/
 RUN git clone "${PWNAGOTCHI_REMOTE:?}" ./
@@ -261,6 +261,8 @@ RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install -r ./requirements.txt
 RUN "${PWNAGOTCHI_VENV:?}"/bin/python -m pip install ./
 RUN "${PWNAGOTCHI_VENV:?}"/bin/pwnagotchi --version
 RUN cp /usr/lib/python3/dist-packages/smbus* "${PWNAGOTCHI_VENV:?}"/lib/python3.7/site-packages/
+# Add Pwnagotchi plugins
+RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git "${PWNAGOTCHI_VENV:?}"/plugins
 
 ##################################################
 ## "main" stage
@@ -371,9 +373,6 @@ COPY --from=build-pwngrid --chown=root:root /usr/local/bin/pwngrid /usr/local/bi
 COPY --from=build-pwnagotchi --chown=root:root /usr/local/lib/pwnagotchi/ /usr/local/lib/pwnagotchi/
 RUN ln -s /usr/local/lib/pwnagotchi/bin/pwnagotchi /usr/local/bin/pwnagotchi
 
-# Add Pwnagotchi plugins
-RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git /usr/local/share/pwnagotchi/availaible-plugins
-
 # Copy Pwnagotchi config
 COPY --chown=root:root ./config/pwnagotchi/ /etc/pwnagotchi/
 RUN find /etc/pwnagotchi/ -type d -not -perm 0755 -exec chmod 0755 '{}' ';'
@@ -399,7 +398,7 @@ ENV PWNAGOTCHI_NAME=pwnagotchi
 ENV PWNAGOTCHI_LANG=en
 ENV PWNAGOTCHI_USERNAME=pwnagotchi
 ENV PWNAGOTCHI_PASSWORD=pwnagotchi
-ENV PWNAGOTCHI_IFACE_NET=phy0
+ENV PWNAGOTCHI_IFACE_NET=wlan0
 ENV PWNAGOTCHI_IFACE_MON=mon0
 ENV PWNAGOTCHI_IFACE_USB=usb0
 ENV PWNAGOTCHI_MAX_BLIND_EPOCHS=10

@@ -89,7 +89,7 @@ build {
       EOF
       ,
       <<EOF
-        rpi-rtl8812au-update
+        rpi-rtl8821au-update
         rpi-nexmon-update
       EOF
       ,
