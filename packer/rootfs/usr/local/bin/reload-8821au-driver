@@ -1,4 +1,3 @@
 #!/bin/sh
 
-modprobe -rv brcmfmac
-iw $PWNAGOTCHI_IFACE_IFACE set monitor control
+exit 0
