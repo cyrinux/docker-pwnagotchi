@@ -21,6 +21,8 @@ start_monitor_interface() {
 	if type rfkill > /dev/null 2>&1; then
 		rfkill unblock all
 	fi
+
+	# MONITOR
 	if ! exists_dev_interface "${PWNAGOTCHI_IFACE_MON:?}" && [ "${PWNAGOTCHI_IFACE_MON}" != "${PWNAGOTCHI_IFACE_NET}" ]; then
 		if exists_phy_interface "${PWNAGOTCHI_IFACE_NET:?}"; then
 			iw phy "${PWNAGOTCHI_IFACE_NET:?}" interface add "${PWNAGOTCHI_IFACE_MON:?}" type monitor
@@ -38,6 +40,26 @@ start_monitor_interface() {
 
 	if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_NET:?}"; then
 		ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
+	fi
+
+	# PWNGRID
+	if ! exists_dev_interface "${PWNAGOTCHI_PWNGRID_MON:?}" && [ "${PWNAGOTCHI_PWNGRID_MON}" != "${PWNAGOTCHI_PWNGRID_NET}" ]; then
+		if exists_phy_interface "${PWNAGOTCHI_PWNGRID_NET:?}"; then
+			iw phy "${PWNAGOTCHI_PWNGRID_NET:?}" interface add "${PWNAGOTCHI_PWNGRID_MON:?}" type monitor
+		elif exists_dev_interface "${PWNAGOTCHI_PWNGRID_NET:?}"; then
+			iw dev "${PWNAGOTCHI_PWNGRID_NET:?}" interface add "${PWNAGOTCHI_PWNGRID_MON:?}" type monitor
+		else
+			printf >&2 '%s\n' "'${PWNAGOTCHI_PWNGRID_NET:?}' interface could not be found"
+			exit 1
+		fi
+	fi
+
+	if [ "${PWNAGOTCHI_PWNGRID_MON}" = "${PWNAGOTCHI_PWNGRID_NET}" ]; then
+		iw "${PWNAGOTCHI_PWNGRID_NET}" set monitor control
+	fi
+
+	if ! is_dev_interface_up "${PWNAGOTCHI_PWNGRID_NET:?}"; then
+		ip link set "${PWNAGOTCHI_PWNGRID_MON:?}" up
 	fi
 }
 
