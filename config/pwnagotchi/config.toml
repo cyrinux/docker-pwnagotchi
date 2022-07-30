@@ -1,7 +1,7 @@
 # Main
 main.name = "${PWNAGOTCHI_NAME}"
 main.lang = "${PWNAGOTCHI_LANG}"
-main.iface = "${PWNAGOTCHI_IFACE_NET}"
+main.iface = "${PWNAGOTCHI_IFACE_MON}"
 main.mon_max_blind_epochs = ${PWNAGOTCHI_MAX_BLIND_EPOCHS}
 main.whitelist = ${PWNAGOTCHI_WHITELIST}
 main.filter = "${PWNAGOTCHI_FILTER}"

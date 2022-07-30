@@ -136,8 +136,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Bettercap
-ARG BETTERCAP_TREEISH=v2.32.0
-ARG BETTERCAP_REMOTE=https://github.com/bettercap/bettercap.git
+ARG BETTERCAP_TREEISH=master
+ARG BETTERCAP_REMOTE=https://github.com/cyrinux/bettercap.git
 RUN mkdir /tmp/bettercap/
 WORKDIR /tmp/bettercap/
 RUN git clone "${BETTERCAP_REMOTE:?}" ./
