@@ -337,6 +337,7 @@ RUN apt-get update \
         rfkill \
         aircrack-ng \
 		git \
+		wget \
 		libi2c0 \
 		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
 	&& rm -rf /var/lib/apt/lists/*
