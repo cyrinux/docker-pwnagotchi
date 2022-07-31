@@ -392,6 +392,9 @@ RUN systemctl enable bluetooth.service bettercap.service pwnagotchi.service pwng
 # Add dictionnary
 ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
 
+# Install PiSugar power manager
+RUN curl http://cdn.pisugar.com/release/Pisugar-power-manager.sh | bash
+
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
 ENV PWNAGOTCHI_LANG=en
