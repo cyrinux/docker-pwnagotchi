@@ -6,7 +6,10 @@ set -eu
 . /usr/local/bin/pwnlib
 
 NEXUTIL="/usr/local/bin/nexutil"
-IS_REALTEK="$(lsusb | grep -q Realtek; echo $?)"
+IS_REALTEK="$(
+	lsusb | grep -q Realtek
+	echo $?
+)"
 
 toggle_nexutil() {
 	if [ "$IS_REALTEK" = 0 ] && [ -f "$NEXUTIL" ]; then
@@ -29,7 +32,7 @@ fi
 start_monitor_interface
 
 # Disable nexutil tool if Realtek usb present
-toggle_nexutil
+# toggle_nexutil
 
 if is_auto_mode 'no_delete'; then
 	exec bettercap -no-colors -caplet pwnagotchi-auto -iface "${PWNAGOTCHI_IFACE_MON:?}"
