@@ -1,5 +1,5 @@
 diff --git a/network/net_linux.go b/network/net_linux.go
-index dd0977a..ef8568c 100644
+index dd0977a..76786d5 100644
 --- a/network/net_linux.go
 +++ b/network/net_linux.go
 @@ -23,7 +23,15 @@ func SetInterfaceChannel(iface string, channel int) error {
@@ -7,7 +7,7 @@ index dd0977a..ef8568c 100644
  	}
  
 -	if core.HasBinary("iw") {
-+	if core.HasBinary("nexutil") {
++	if core.HasBinary("nexutil") && strings.Contains(iface, "mon") {
 +		// Debug("SetInterfaceChannel(%s, %d) nexutil based", iface, channel)
 +		out, err := core.Exec("nexutil", []string{"-I", iface, "-i", "-s", "30", "-v", fmt.Sprintf("%d", channel)})
 +		if err != nil {

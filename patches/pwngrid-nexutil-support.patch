@@ -1,0 +1,100 @@
+diff --git a/cmd/pwngrid/main.go b/cmd/pwngrid/main.go
+index e32647b..e03b4ab 100644
+--- a/cmd/pwngrid/main.go
++++ b/cmd/pwngrid/main.go
+@@ -3,6 +3,7 @@ package main
+ import (
+ 	"flag"
+ 	"fmt"
++
+ 	"github.com/evilsocket/islazy/log"
+ 	"github.com/evilsocket/pwngrid/version"
+ )
+diff --git a/mesh/interface.go b/mesh/interface.go
+index fdba999..0fbbdab 100644
+--- a/mesh/interface.go
++++ b/mesh/interface.go
+@@ -3,10 +3,11 @@ package mesh
+ import (
+ 	"bufio"
+ 	"fmt"
+-	"github.com/evilsocket/pwngrid/utils"
+ 	"regexp"
+ 	"strconv"
+ 	"strings"
++
++	"github.com/evilsocket/pwngrid/utils"
+ )
+ 
+ var chanParser = regexp.MustCompile(`^\s+Channel.([0-9]+)\s+:\s+([0-9\.]+)\s+GHz.*$`)
+@@ -20,16 +21,6 @@ func ActivateInterface(name string) error {
+ 	return nil
+ }
+ 
+-func SetChannel(iface string, channel int) (error, string) {
+-	if out, err := utils.Exec("iwconfig", []string{iface, "channel", fmt.Sprintf("%d", channel)}); err != nil {
+-		return err, out
+-	} else if out != "" {
+-		return fmt.Errorf("unexpected output while setting interface %s to channel %d: %s", iface, channel, out), out
+-	} else {
+-		return nil, out
+-	}
+-}
+-
+ func SupportedChannels(iface string) ([]int, error) {
+ 	out, err := utils.Exec("iwlist", []string{iface, "freq"})
+ 	if err != nil {
+@@ -49,3 +40,27 @@ func SupportedChannels(iface string) ([]int, error) {
+ 
+ 	return channels, nil
+ }
++
++func SetChannel(iface string, channel int) (error, string) {
++	if utils.HasBinary("nexutil") && strings.Contains(iface, "mon") {
++		// Debug("SetInterfaceChannel(%s, %d) nexutil based", iface, channel)
++		out, err := utils.Exec("nexutil", []string{"-I", iface, "-i", "-s", "30", "-v", fmt.Sprintf("%d", channel)})
++		if err != nil {
++			return fmt.Errorf("nexutil: out=%s err=%s", out, err), out
++		} else if out != "" {
++			return fmt.Errorf("unexpected output while setting interface %s to channel %d: %s", iface, channel, out), out
++		} else {
++			return nil, out
++		}
++	} else if utils.HasBinary("iwconfig") {
++		if out, err := utils.Exec("iwconfig", []string{iface, "channel", fmt.Sprintf("%d", channel)}); err != nil {
++			return err, out
++		} else if out != "" {
++			return fmt.Errorf("unexpected output while setting interface %s to channel %d: %s", iface, channel, out), out
++		} else {
++			return nil, out
++		}
++	} else {
++		return fmt.Errorf("no nexutil or iwconfig binary"), ""
++	}
++}
+diff --git a/utils/exec.go b/utils/exec.go
+index 92619f0..fc6569d 100644
+--- a/utils/exec.go
++++ b/utils/exec.go
+@@ -1,8 +1,9 @@
+ package utils
+ 
+ import (
+-	"github.com/evilsocket/islazy/str"
+ 	"os/exec"
++
++	"github.com/evilsocket/islazy/str"
+ )
+ 
+ func Exec(executable string, args []string) (string, error) {
+@@ -18,3 +19,10 @@ func Exec(executable string, args []string) (string, error) {
+ 		return str.Trim(string(raw)), nil
+ 	}
+ }
++
++func HasBinary(executable string) bool {
++	if path, err := exec.LookPath(executable); err != nil || path == "" {
++		return false
++	}
++	return true
++}

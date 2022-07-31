@@ -181,6 +181,8 @@ WORKDIR /tmp/pwngrid/
 RUN git clone "${PWNGRID_REMOTE:?}" ./
 RUN git checkout "${PWNGRID_TREEISH:?}"
 RUN git submodule update --init --recursive
+COPY ./patches/pwngrid-*.patch ./
+RUN git apply -v ./pwngrid-*.patch
 RUN go mod download -x
 RUN go build -v -o ./dist/pwngrid ./cmd/pwngrid/*.go
 RUN mv ./dist/pwngrid /usr/local/bin/pwngrid
@@ -392,7 +394,7 @@ RUN systemctl enable bluetooth.service bettercap.service pwnagotchi.service pwng
 ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
 
 # Install PiSugar power manager
-RUN curl http://cdn.pisugar.com/release/Pisugar-power-manager.sh | bash
+# RUN curl http://cdn.pisugar.com/release/Pisugar-power-manager.sh | bash
 
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
