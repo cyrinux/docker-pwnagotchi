@@ -121,6 +121,8 @@ build {
         download-frozen-image /tmp/pwnagotchi-image/ ${var.image_name}:latest
         tar -cf /var/lib/pwnagotchi-image.tar -C /tmp/pwnagotchi-image/ ./
         rm -rf /tmp/pwnagotchi-image/
+        ln -s /var/lib/pwnagotchi/peers /root/peers
+        ln -s /var/lib/pwnagotchi/handshakes /root/handshakes
       EOF
       ,
       <<EOF
