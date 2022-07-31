@@ -10,12 +10,6 @@ if [ -f /etc/profile.d/env.sh ]; then
 	. /etc/profile.d/env.sh
 fi
 
-# Disable builtin wifi
-# if [ ! grep -q disable-wifi /boot/config.txt ]; then
-# 	echo "dtoverlay=disable-wifi" >> /boot/config.txt
-# 	reboot
-# fi
-
 # Starts monitor interface
 start_monitor_interface() {
 	if type rfkill > /dev/null 2>&1; then
@@ -40,6 +34,7 @@ start_monitor_interface() {
 	fi
 
 	if ! is_dev_interface_up "${PWNAGOTCHI_IFACE_NET:?}"; then
+		ip link set "${PWNAGOTCHI_IFACE_NET:?}" up
 		ip link set "${PWNAGOTCHI_IFACE_MON:?}" up
 	fi
 
@@ -65,6 +60,7 @@ start_monitor_interface() {
 		fi
 
 		if ! is_dev_interface_up "${PWNAGOTCHI_PWNGRID_NET:?}"; then
+			ip link set "${PWNAGOTCHI_PWNGRID_NET:?}" up
 			ip link set "${PWNAGOTCHI_PWNGRID_MON:?}" up
 		fi
 	fi
