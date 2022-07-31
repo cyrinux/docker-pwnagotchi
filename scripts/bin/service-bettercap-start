@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
@@ -6,10 +6,7 @@ set -eu
 . /usr/local/bin/pwnlib
 
 NEXUTIL="/usr/local/bin/nexutil"
-IS_REALTEK="$(
-	lsusb | grep -q Realtek
-	echo $?
-)"
+IS_REALTEK="$(lsusb | grep -q Realtek; echo $?)"
 
 toggle_nexutil() {
 	if [ "$IS_REALTEK" = 0 ] && [ -f "$NEXUTIL" ]; then
