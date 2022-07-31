@@ -35,6 +35,7 @@ ExecStart=/usr/bin/docker run \
 	--mount type=bind,src=/var/log/pwnagotchi/,dst=/var/log/journal/ \
     --volume /var/lib/bluetooth/:/var/lib/bluetooth/ \
     --volume /root/handshakes/:/root/handshakes/ \
+    --volume /root/peers/:/root/peers/ \
 	--env PWNAGOTCHI_NAME=%H \
 	--env-file /etc/pwnagotchi.env \
 	${IMAGE}:${TAG}
