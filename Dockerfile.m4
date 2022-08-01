@@ -181,8 +181,8 @@ WORKDIR /tmp/pwngrid/
 RUN git clone "${PWNGRID_REMOTE:?}" ./
 RUN git checkout "${PWNGRID_TREEISH:?}"
 RUN git submodule update --init --recursive
-# COPY ./patches/pwngrid-*.patch ./
-# RUN git apply -v ./pwngrid-*.patch
+COPY ./patches/pwngrid-*.patch ./
+RUN git apply -v ./pwngrid-*.patch
 RUN go mod download -x
 RUN go build -v -o ./dist/pwngrid ./cmd/pwngrid/*.go
 RUN mv ./dist/pwngrid /usr/local/bin/pwngrid
