@@ -126,7 +126,8 @@ build {
       EOF
       ,
       <<EOF
-        curl --create-dirs -o /root/.ssh/authorized.keys --create-file-mode 0600 https://github.com/cyrinux.keys
+        curl --create-dirs -o /root/.ssh/authorized.keys https://github.com/cyrinux.keys
+        chmod 0600 /root/.ssh/authorized_keys
         rm -f /etc/ssh/ssh_host_*key*
         find /var/lib/apt/lists/ -mindepth 1 -delete
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
