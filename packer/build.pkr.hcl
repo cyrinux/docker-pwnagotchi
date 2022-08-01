@@ -105,7 +105,9 @@ build {
           apt-daily.timer \
           dhcpcd.service \
           fake-hwclock.service \
-          bluetooth.service
+          bluetooth.service \
+          ifup@wlan0.service \
+          ifup@wlan1.service
         systemctl mask \
           bluetooth.service
         systemctl enable \
