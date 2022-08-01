@@ -395,21 +395,7 @@ RUN systemctl enable bluetooth.service bettercap.service pwnagotchi.service pwng
 ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
 
 # Install PiSugar power manager
-RUN cd /tmp && \
-    wget http://cdn.pisugar.com/release/pisugar-server_1.5.0_armhf.deb && \
-    wget http://cdn.pisugar.com/release/pisugar-poweroff_1.5.0_armhf.deb && \
-	debconf-set-selections << EOF \
-	pisugar-server pisugar-server/model select PiSugar 3 \
-	pisugar-server pisugar-server/auth-username string pwnagotchi \
-	pisugar-server pisugar-server/auth-password password pwnagotchi \
-	pisugar-poweroff pisugar-poweroff/model select PiSugar 3 \
-	EOF && \
-	dpkg -i /tmp/*.deb && \
-    rm -f /tmp/*.deb && \
-    git clone https://github.com/PiSugar/pisugar2py.git /opt/pisugar2py && \
-    git clone https://github.com/PiSugar/pwnagotchi-pisugar2-plugin.git /opt/pwnagotchi-pisugar2-plugin && \
-    ln -s /opt/pwnagotchi-pisugar2-plugin/pisguar2.py /usr/local/lib/pwnagotchi/plugins/pisugar2.py && \
-    ln -s /opt/pisugar2 /usr/local/lib/pwnagotchi/lib/python3.7/site-packages/pisugar2
+RUN /usr/local/bin/rpi-pisugar-install
 
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
