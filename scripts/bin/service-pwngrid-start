@@ -13,5 +13,5 @@ fi
 exec pwngrid \
 	-address 127.0.0.1:8666 \
 	-keys /root/ \
-	-iface "${PWNAGOTCHI_PWNGRID_MON:?}" \
+	-iface "${PWNAGOTCHI_IFACE_MON:?}" \
 	-client-token /root/.api-enrollment.json
