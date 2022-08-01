@@ -323,7 +323,6 @@ RUN apt-get update \
 		libwebpdemux2 \
 		libwebpmux3 \
 		libzstd1 \
-        debconf-utils \
         vim \
 		net-tools \
 		netcat-openbsd \
@@ -340,7 +339,7 @@ RUN apt-get update \
 		git \
 		wget \
 		libi2c0 \
-		m4_ifelse(IS_RASPIOS, 1, [[libjasper1]]) \
+		m4_ifelse(IS_RASPIOS, 1, [[libjasper1 debconf-utils]]) \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Remove default systemd unit dependencies
@@ -395,7 +394,7 @@ RUN systemctl enable bluetooth.service bettercap.service pwnagotchi.service pwng
 ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
 
 # Install PiSugar power manager
-RUN /usr/local/bin/rpi-pisugar-install
+m4_ifelse(IS_RASPIOS, 1, [[RUN /usr/local/bin/rpi-pisugar-install]])
 
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
