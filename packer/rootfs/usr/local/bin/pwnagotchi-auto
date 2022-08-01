@@ -1,3 +1,4 @@
 #!/bin/sh
 
 touch /var/lib/pwnagotchi/.pwnagotchi-auto
+systemctl restart pwnagotchi
