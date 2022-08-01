@@ -1,5 +1,5 @@
 diff --git a/mesh/packet_muxer.go b/mesh/packet_muxer.go
-index 242eee1..23abaf9 100644
+index 242eee1..79ff9ec 100644
 --- a/mesh/packet_muxer.go
 +++ b/mesh/packet_muxer.go
 @@ -2,12 +2,13 @@ package mesh
@@ -18,16 +18,18 @@ index 242eee1..23abaf9 100644
  )
  
  const (
-@@ -54,9 +55,9 @@ func NewPacketMuxer(iface, filter string, workers int) (mux *PacketMuxer, err er
+@@ -54,8 +55,12 @@ func NewPacketMuxer(iface, filter string, workers int) (mux *PacketMuxer, err er
  		}
  		defer inactiveHandle.CleanUp()
  
 -		if err = inactiveHandle.SetRFMon(true); err != nil {
 -			log.Warning("error while setting interface %s in monitor mode: %s", iface, err)
--		}
-+		// if err = inactiveHandle.SetRFMon(true); err != nil {
-+		// 	log.Warning("error while setting interface %s in monitor mode: %s", iface, err)
-+		// }
++		if strings.Contains(iface, "mon") {
++			if err = inactiveHandle.SetRFMon(true); err != nil {
++				log.Warning("error while setting interface %s in monitor mode: %s", iface, err)
++			}
++		} else {
++			log.Info("interface %s dont contains 'mon' and should be already in monitor mode")
+ 		}
  
  		if err = inactiveHandle.SetSnapLen(SnapLength); err != nil {
- 			return nil, fmt.Errorf("error while settng span len: %s", err)

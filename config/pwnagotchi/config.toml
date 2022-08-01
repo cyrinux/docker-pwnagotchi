@@ -103,3 +103,7 @@ main.plugins.paw-gps.enabled = ${PWNAGOTCHI_PAW_GPS_ENABLED}
 main.plugins.paw-gps.ip = "192.168.44.1"
 
 main.plugins.ups_lite.enabled = ${PWNAGOTCHI_UPS_LITE_ENABLED}
+
+main.plugins.pisugar2.enabled = ${PWNAGOTCHI_PISGUGAR_ENABLED}
+main.plugins.pisugar2.shutdown = 5
+main.plugins.pisugar2.sync_rtc_on_boot = true

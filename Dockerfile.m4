@@ -323,7 +323,7 @@ RUN apt-get update \
 		libwebpdemux2 \
 		libwebpmux3 \
 		libzstd1 \
-		nano \
+        vim \
 		net-tools \
 		netcat-openbsd \
 		openmpi-bin \
@@ -394,7 +394,16 @@ RUN systemctl enable bluetooth.service bettercap.service pwnagotchi.service pwng
 ADD https://raw.githubusercontent.com/cyrinux/richelieu/master/french_passwords_top20000.txt /opt/wordlists/
 
 # Install PiSugar power manager
-# RUN curl http://cdn.pisugar.com/release/Pisugar-power-manager.sh | bash
+# http://cdn.pisugar.com/release/Pisugar-power-manager.sh
+RUN cd /tmp && \
+    wget http://cdn.pisugar.com/release/pisugar-server_1.5.0_armhf.deb && \
+    wget http://cdn.pisugar.com/release/pisugar-poweroff_1.5.0_armhf.deb && \
+	dpkg -i /tmp/*.deb && \
+    rm -f /tmp/*.deb && \
+    git clone https://github.com/PiSugar/pisugar2py.git /opt/pisugar2py && \
+    git clone https://github.com/PiSugar/pwnagotchi-pisugar2-plugin.git /opt/pwnagotchi-pisugar2-plugin && \
+    ln -s /opt/pwnagotchi-pisugar2-plugin/pisguar2.py /usr/local/lib/pwnagotchi/plugins/pisugar2.py && \
+    ln -s /opt/pisugar2 /usr/local/lib/pwnagotchi/lib/python3.7/site-packages/pisugar2
 
 # Environment
 ENV PWNAGOTCHI_NAME=pwnagotchi
@@ -426,7 +435,8 @@ ENV PWNAGOTCHI_PERSONALITY_ASSOCIATE=true
 ENV PWNAGOTCHI_PERSONALITY_CHANNELS=[]
 ENV PWNAGOTCHI_ANDROID_MAC=3A:4B:5C:6D:7E:8F
 ENV PWNAGOTCHI_ANDROID_IP=192.168.44.44
-ENV PWNAGOTCHI_UPS_LITE_ENABLED=true
+ENV PWNAGOTCHI_UPS_LITE_ENABLED=false
+ENV PWNAGOTCHI_PISUGAR_ENABLED=false
 ENV PWNAGOTCHI_WPASEC_API_KEY=""
 ENV PWNAGOTCHI_WPASEC_ENABLED=false
 ENV PWNAGOTCHI_ONLINEHASHCRACK_EMAIL=""
