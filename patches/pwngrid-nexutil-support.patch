@@ -72,6 +72,59 @@ index fdba999..0fbbdab 100644
 +		return fmt.Errorf("no nexutil or iwconfig binary"), ""
 +	}
 +}
+diff --git a/mesh/packet_muxer.go b/mesh/packet_muxer.go
+index 242eee1..334d365 100644
+--- a/mesh/packet_muxer.go
++++ b/mesh/packet_muxer.go
+@@ -2,12 +2,13 @@ package mesh
+ 
+ import (
+ 	"fmt"
++	"strings"
++	"time"
++
+ 	"github.com/evilsocket/islazy/async"
+ 	"github.com/evilsocket/islazy/log"
+ 	"github.com/google/gopacket"
+ 	"github.com/google/gopacket/pcap"
+-	"strings"
+-	"time"
+ )
+ 
+ const (
+@@ -65,19 +66,19 @@ func NewPacketMuxer(iface, filter string, workers int) (mux *PacketMuxer, err er
+ 		 * We don't want to pcap.BlockForever otherwise pcap_close(handle)
+ 		 * could hang waiting for a timeout to expire ...
+ 		 */
+-		readTimeout := time.Duration(ReadTimeout) * time.Millisecond
+-		if err = inactiveHandle.SetTimeout(readTimeout); err != nil {
+-			return nil, fmt.Errorf("error while setting timeout: %s", err)
+-		} else if mux.handle, err = inactiveHandle.Activate(); err != nil {
+-			if retry == 0 && err.Error() == ErrIfaceNotUp {
+-				log.Info("interface %s is down, bringing it up ...", iface)
+-				if err := ActivateInterface(iface); err != nil {
+-					return nil, err
+-				}
+-				continue
+-			}
+-			return nil, fmt.Errorf("error while activating handle: %s", err)
+-		}
++		// readTimeout := time.Duration(ReadTimeout) * time.Millisecond
++		// if err = inactiveHandle.SetTimeout(readTimeout); err != nil {
++		// 	return nil, fmt.Errorf("error while setting timeout: %s", err)
++		// } else if mux.handle, err = inactiveHandle.Activate(); err != nil {
++		// 	if retry == 0 && err.Error() == ErrIfaceNotUp {
++		// 		log.Info("interface %s is down, bringing it up ...", iface)
++		// 		if err := ActivateInterface(iface); err != nil {
++		// 			return nil, err
++		// 		}
++		// 		continue
++		// 	}
++		// 	return nil, fmt.Errorf("error while activating handle: %s", err)
++		// }
+ 
+ 		if filter != "" {
+ 			if err := mux.handle.SetBPFFilter(filter); err != nil {
 diff --git a/utils/exec.go b/utils/exec.go
 index 92619f0..fc6569d 100644
 --- a/utils/exec.go
