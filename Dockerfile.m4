@@ -241,8 +241,8 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Pwnagotchi
-ARG PWNAGOTCHI_TREEISH=5d8c000440ffb2e86e4b33e1e096eaf7e56d8415
-ARG PWNAGOTCHI_REMOTE=https://github.com/DrSchottky/pwnagotchi.git
+ARG PWNAGOTCHI_TREEISH=a7aee8615aeeea5ceed442a0e9cef5038c0c126e
+ARG PWNAGOTCHI_REMOTE=https://github.com/evilsocket/pwnagotchi.git
 RUN mkdir /tmp/pwnagotchi/
 WORKDIR /tmp/pwnagotchi/
 RUN git clone "${PWNAGOTCHI_REMOTE:?}" ./
