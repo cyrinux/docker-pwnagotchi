@@ -3,6 +3,8 @@ variable "image_name" {
 }
 
 build {
+  name = "main"
+
   sources = [
     "source.arm-image.armhf"
   ]
@@ -138,3 +140,15 @@ build {
     ]
   }
 }
+
+# build {
+#   name = "disable-wifi"
+
+#   sources = ["build.name.main"]
+
+#   provisioner "file" {
+#     direction   = "upload"
+#     source      = "./disable-wifi"
+#     destination = "/boot"
+#   }
+# }
