@@ -2,8 +2,8 @@
 
 set -eu
 
-VERSION="1.5.0"
-
+VERSION="1.7.1"
+MODEL="PiSugar 3"
 apt-get update && apt-get install -y wget git
 
 # Install pisugar
@@ -13,10 +13,10 @@ wget http://cdn.pisugar.com/release/pisugar-server_${VERSION}_armhf.deb
 wget http://cdn.pisugar.com/release/pisugar-poweroff_${VERSION}_armhf.deb
 
 debconf-set-selections << EOF
-pisugar-server pisugar-server/model select PiSugar 3
+pisugar-server pisugar-server/model select ${MODEL}
 pisugar-server pisugar-server/auth-username string pwnagotchi
 pisugar-server pisugar-server/auth-password password pwnagotchi
-pisugar-poweroff pisugar-poweroff/model select PiSugar 3
+pisugar-poweroff pisugar-poweroff/model select ${MODEL}
 EOF
 
 dpkg -i /tmp/*.deb
@@ -28,3 +28,5 @@ ln -s /opt/pisugar2py /usr/local/lib/pwnagotchi/lib/python3.7/site-packages/pisu
 
 git clone https://github.com/PiSugar/pwnagotchi-pisugar2-plugin.git /opt/pwnagotchi-pisugar2-plugin
 ln -s /opt/pwnagotchi-pisugar2-plugin/pisugar2.py /usr/local/lib/pwnagotchi/plugins/pisugar2.py
+
+systemctl enable pisugar-server
