@@ -91,6 +91,7 @@ build {
       EOF
       ,
       <<EOF
+        rpi-pisugar-install
         rpi-rtl8821au-update
         rpi-nexmon-update
       EOF
@@ -139,15 +140,3 @@ build {
     ]
   }
 }
-
-# build {
-#   name = "disable-wifi"
-
-#   sources = ["build.name.main"]
-
-#   provisioner "file" {
-#     direction   = "upload"
-#     source      = "./disable-wifi"
-#     destination = "/boot"
-#   }
-# }
