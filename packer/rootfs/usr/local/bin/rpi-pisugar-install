@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -eu
+
+VERSION="1.7.1"
+MODEL="PiSugar 3"
+
+# Install pisugar
+cd /tmp
+
+wget http://cdn.pisugar.com/release/pisugar-server_${VERSION}_armhf.deb
+wget http://cdn.pisugar.com/release/pisugar-poweroff_${VERSION}_armhf.deb
+
+debconf-set-selections << EOF
+pisugar-server pisugar-server/model select ${MODEL}
+pisugar-server pisugar-server/auth-username string pwnagotchi
+pisugar-server pisugar-server/auth-password password pwnagotchi
+pisugar-poweroff pisugar-poweroff/model select ${MODEL}
+EOF
+
+dpkg -i /tmp/*.deb
+rm -f /tmp/*.deb
+
+systemctl enable pisugar-server pisugar-poweroff
