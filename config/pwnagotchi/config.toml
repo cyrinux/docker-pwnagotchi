@@ -100,7 +100,7 @@ main.plugins.wpa-sec.whitelist = []
 
 main.plugins.webgpsmap.enabled = ${PWNAGOTCHI_WEBGPSMAP_ENABLED}
 main.plugins.paw-gps.enabled = ${PWNAGOTCHI_PAW_GPS_ENABLED}
-main.plugins.paw-gps.ip = "192.168.44.1"
+main.plugins.paw-gps.ip = "192.168.44.1:8080"
 
 main.plugins.ups_lite.enabled = ${PWNAGOTCHI_UPS_LITE_ENABLED}
 
