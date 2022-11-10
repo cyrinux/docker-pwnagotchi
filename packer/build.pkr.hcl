@@ -94,6 +94,7 @@ build {
         rpi-pisugar-install
         rpi-rtl8821au-update
         rpi-nexmon-update
+        rm -rf /usr/local/src/nexmon/
       EOF
       ,
       <<EOF
@@ -103,6 +104,7 @@ build {
       EOF
       ,
       <<EOF
+        systemctl set-default multi-user.target
         systemctl disable \
           apt-daily-upgrade.timer \
           apt-daily.timer \
@@ -134,7 +136,7 @@ build {
         # curl --create-dirs -o /root/.ssh/authorized.keys https://github.com/cyrinux.keys
         # chmod 0600 /root/.ssh/authorized_keys
         rm -f /etc/ssh/ssh_host_*key*
-        find /var/lib/apt/lists/ -mindepth 1 -delete
+        find /var/lib/apt/lists/ -mindepth 1 -delete; apt-get clean
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
         find /tmp/ /var/tmp/ -ignore_readdir_race -mindepth 1 -delete ||:
       EOF

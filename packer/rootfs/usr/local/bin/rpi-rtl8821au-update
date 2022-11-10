@@ -26,7 +26,12 @@ if [ "$(uname -m)" = "armv7l" ]; then
 
 	# Clone project
 	cd "${RTL8821AU_SRCDIR:?}"
-	git clone "${RTL8821AU_REMOTE:?}" ./
+	if [ ! -e "${RTL8821AU_SRCDIR:?}"/.git/ ]; then
+		git clone "${RTL8821AU_REMOTE:?}" ./
+	else
+		git reset --hard HEAD
+		git clean -d --force
+	fi
 	git checkout "${RTL8821AU_TREEISH:?}"
 
 	# Build

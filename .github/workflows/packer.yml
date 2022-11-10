@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-=======
->>>>>>> 1880dc7 (chore: wip)
 name: "Packer"
 
 on:
@@ -11,7 +8,7 @@ on:
   pull_request:
     branches: ["*"]
   schedule:
-    - cron: "20 04 1,15 * *"
+    - cron: "22.04 1,15 * *"
   workflow_dispatch:
 
 concurrency:
@@ -23,7 +20,7 @@ permissions: {}
 jobs:
   validate-packer:
     name: "Validate Packer configuration"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-22.04"
     permissions:
       contents: "read"
     defaults:
@@ -31,7 +28,7 @@ jobs:
         working-directory: "./packer/"
     steps:
       - name: "Checkout project"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
       - name: "Install dependencies"
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
@@ -50,7 +47,7 @@ jobs:
   build-packer:
     name: "Build Packer image"
     needs: ["validate-packer"]
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-22.04"
     permissions:
       contents: "read"
     defaults:
@@ -58,7 +55,7 @@ jobs:
         working-directory: "./packer/"
     steps:
       - name: "Checkout project"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
       - name: "Install dependencies"
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
@@ -66,7 +63,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86
       - name: "Init Packer"
         run: |
-          packer init ./
+          make init
       - name: "Build image"
         run: |
           sudo make build-armhf PACKER_LOG=1

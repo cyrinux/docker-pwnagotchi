@@ -2,7 +2,7 @@
 
 set -eu
 
-IP_ADDRESS=$(hostname -I ||:)
+IP_ADDRESS=$(hostname -I || :)
 if [ -n "${IP_ADDRESS?}" ]; then
 	printf '%s\n' "My IP address is: ${IP_ADDRESS:?}"
 fi
