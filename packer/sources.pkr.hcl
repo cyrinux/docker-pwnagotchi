@@ -16,5 +16,5 @@ source "arm-image" "armhf" {
   qemu_args   = ["-cpu", "${var.cpu_type}"]
 
   output_filename   = "./dist/armhf/disk-${var.pwnagotchi_name}-${var.cpu_type}.img"
-  target_image_size = 7516192768
+  target_image_size = 7 * 1024 * 1024 * 1024
 }
