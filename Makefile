@@ -85,6 +85,7 @@ $(IMAGE_GENERIC_AMD64_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-generic-amd64' \
 		--tag '$(IMAGE_NAME):latest-generic-amd64' \
+		--platform linux/amd64 \
 		--file '$@' ./
 
 .PHONY: build-raspios-arm64v8-image
@@ -101,6 +102,7 @@ $(IMAGE_RASPIOS_ARM64V8_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm64v8' \
 		--tag '$(IMAGE_NAME):latest-raspios-arm64v8' \
+		--platform linux/arm64/v8 \
 		--file '$@' ./
 
 .PHONY: build-raspios-arm32v7-image
@@ -117,6 +119,7 @@ $(IMAGE_RASPIOS_ARM32V7_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm32v7' \
 		--tag '$(IMAGE_NAME):latest-raspios-arm32v7' \
+		--platform linux/arm/v7 \
 		--file '$@' ./
 
 .PHONY: build-raspios-arm32v6-image
@@ -133,6 +136,8 @@ $(IMAGE_RASPIOS_ARM32V6_DOCKERFILE): $(DOCKERFILE_TEMPLATE)
 	'$(DOCKER)' build $(IMAGE_BUILD_OPTS) \
 		--tag '$(IMAGE_NAME):$(IMAGE_VERSION)-raspios-arm32v6' \
 		--tag '$(IMAGE_NAME):latest-raspios-arm32v6' \
+		--platform linux/arm/v6 \
+		--tag '$(IMAGE_NAME):latest' \
 		--file '$@' ./
 
 ##################################################
@@ -270,7 +275,7 @@ push-cross-manifest:
 
 .PHONY: binfmt-register
 binfmt-register:
-	'$(DOCKER)' run --rm --privileged docker.io/hectorm/qemu-user-static:latest --reset
+	'$(DOCKER)' run --rm --privileged docker.io/hectorm/qemu-user-static:latest --reset --persistent yes --credential yes
 
 ##################################################
 ## "version" target

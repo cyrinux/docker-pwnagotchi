@@ -147,6 +147,8 @@ RUN git apply -v ./bettercap-*.patch
 RUN go mod download -x
 RUN go build -v -o ./dist/bettercap ./
 RUN mv ./dist/bettercap /usr/local/bin/bettercap
+RUN mkdir -p /usr/local/share/bettercap/
+RUN mv ./dist/ui/ /usr/local/share/bettercap/ui/
 RUN file /usr/local/bin/bettercap
 RUN /usr/local/bin/bettercap --version
 
