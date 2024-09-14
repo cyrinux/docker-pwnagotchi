@@ -67,3 +67,19 @@ jobs:
       - name: "Build image"
         run: |
           sudo make build-armhf PACKER_LOG=1
+      - name: "Set release tag" # New step to determine the release tag
+        run: |
+          REF=${GITHUB_REF}
+          if [[ "$REF" == refs/tags/* ]]; then
+            TAG_NAME=${REF#refs/tags/}
+          else
+            TAG_NAME=${GITHUB_SHA}
+          fi
+          echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
+      - name: "Create Release and Upload Artifact" # New step to create release and upload artifact
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.RELEASE_TAG }}
+          name: Release ${{ env.RELEASE_TAG }}
+          artifacts: ./output-armhf/** # Adjust the path to your built artifact
+          token: ${{ secrets.GITHUB_TOKEN }}
