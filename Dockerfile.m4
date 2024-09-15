@@ -242,8 +242,9 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Pwnagotchi
-ARG PWNAGOTCHI_TREEISH=544314b88cee7f2ee488b49bd61636d664a4c7fa
+ARG PWNAGOTCHI_TREEISH=ef0f35da0a4c7708a0e99dc0f75a4182efe328a5
 ARG PWNAGOTCHI_REMOTE=https://github.com/evilsocket/pwnagotchi.git
+ARG PWNAGOTCHI_EXPERIENCE_TREEISH=f456040de4951de1e6ab3fcb4453d42a7da362d1
 RUN mkdir /tmp/pwnagotchi/
 WORKDIR /tmp/pwnagotchi/
 RUN git clone "${PWNAGOTCHI_REMOTE:?}" ./
@@ -263,6 +264,8 @@ RUN "${PWNAGOTCHI_VENV:?}"/bin/pwnagotchi --version
 RUN cp /usr/lib/python3/dist-packages/smbus* "${PWNAGOTCHI_VENV:?}"/lib/python3.7/site-packages/
 # Add Pwnagotchi plugins
 RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git "${PWNAGOTCHI_VENV:?}"/plugins
+# Add experience plugins
+RUN wget -q https://raw.githubusercontent.com/GaelicThunder/Experience-Plugin-Pwnagotchi/${PWNAGOTCHI_EXPERIENCE_TREEISH}/exp.py -O "${PWNAGOTCHI_VENV:?}"/plugins/exp.py
 
 ##################################################
 ## "main" stage
@@ -419,6 +422,7 @@ ENV PWNAGOTCHI_PLUGIN_GRID_EXCLUDE=[]
 ENV PWNAGOTCHI_PLUGIN_LED_ENABLED=true
 ENV PWNAGOTCHI_PLUGIN_MEMTEMP_ENABLED=true
 ENV PWNAGOTCHI_PLUGIN_SESSION_STATS_ENABLED=true
+ENV PWNAGOTCHI_PLUGIN_EXPERIENCE_ENABLED=true
 ENV PWNAGOTCHI_PERSONALITY_ADVERTISE=true
 ENV PWNAGOTCHI_PERSONALITY_DEAUTH=true
 ENV PWNAGOTCHI_PERSONALITY_ASSOCIATE=true
@@ -434,7 +438,6 @@ ENV PWNAGOTCHI_ONLINEHASHCRACK_ENABLED=false
 ENV PWNAGOTCHI_WEBGPSMAP_ENABLED=false
 ENV PWNAGOTCHI_PAW_GPS_ENABLED=true
 ENV PWNAGOTCHI_QUICKDIC_ENABLED=false
-
 
 STOPSIGNAL SIGRTMIN+3
 HEALTHCHECK --start-period=30s --interval=10s --timeout=5s --retries=1 CMD ["/usr/local/bin/container-healthcheck"]

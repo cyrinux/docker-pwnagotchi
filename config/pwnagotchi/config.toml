@@ -107,3 +107,10 @@ main.plugins.ups_lite.enabled = ${PWNAGOTCHI_UPS_LITE_ENABLED}
 main.plugins.pisugar2.enabled = ${PWNAGOTCHI_PISUGAR_ENABLED}
 main.plugins.pisugar2.shutdown = 5
 main.plugins.pisugar2.sync_rtc_on_boot = true
+
+main.plugins.exp.enabled = ${PWNAGOTCHI_PLUGIN_EXPERIENCE_ENABLED}
+main.plugins.exp.lvl_x_coord = 0
+main.plugins.exp.lvl_y_coord = 81
+main.plugins.exp.exp_x_coord = 38
+main.plugins.exp.exp_y_coord = 81
+main.plugins.exp.bar_symbols_count = 12
