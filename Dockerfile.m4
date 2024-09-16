@@ -265,8 +265,7 @@ RUN cp /usr/lib/python3/dist-packages/smbus* "${PWNAGOTCHI_VENV:?}"/lib/python3.
 # Add Pwnagotchi plugins
 RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git "${PWNAGOTCHI_VENV:?}"/plugins
 # Add experience plugins
-RUN wget -q https://raw.githubusercontent.com/GaelicThunder/Experience-Plugin-Pwnagotchi/${PWNAGOTCHI_EXPERIENCE_TREEISH}/exp.py -O "${PWNAGOTCHI_VENV:?}"/plugins/exp.py
-
+COPY ./plugins/exp.py "${PWNAGOTCHI_VENV:?}"/plugins/exp.py 
 ##################################################
 ## "main" stage
 ##################################################
