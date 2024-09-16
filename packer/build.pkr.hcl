@@ -133,8 +133,11 @@ build {
       EOF
       ,
       <<EOF
-        # curl --create-dirs -o /root/.ssh/authorized.keys https://github.com/cyrinux.keys
-        # chmod 0600 /root/.ssh/authorized_keys
+        curl -fsSL https://tailscale.com/install.sh | sh
+      EOF,
+      <<EOF
+        curl --create-dirs -o /root/.ssh/authorized.keys https://github.com/cyrinux.keys
+        chmod 0600 /root/.ssh/authorized_keys
         rm -f /etc/ssh/ssh_host_*key*
         find /var/lib/apt/lists/ -mindepth 1 -delete; apt-get clean
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
