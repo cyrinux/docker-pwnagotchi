@@ -133,12 +133,13 @@ build {
       EOF
       ,
       <<EOF
-        curl -fsSL https://tailscale.com/install.sh | sh
+        curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.gpg | apt-key add -
+        curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.list | tee /etc/apt/sources.list.d/tailscale.list
+        apt-get update
+        apt-get install tailscale -y
       EOF
       ,
       <<EOF
-        curl --create-dirs -o /root/.ssh/authorized.keys https://github.com/cyrinux.keys
-        chmod 0600 /root/.ssh/authorized_keys
         rm -f /etc/ssh/ssh_host_*key*
         find /var/lib/apt/lists/ -mindepth 1 -delete; apt-get clean
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
