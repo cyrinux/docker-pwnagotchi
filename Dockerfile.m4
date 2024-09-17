@@ -264,8 +264,8 @@ RUN "${PWNAGOTCHI_VENV:?}"/bin/pwnagotchi --version
 RUN cp /usr/lib/python3/dist-packages/smbus* "${PWNAGOTCHI_VENV:?}"/lib/python3.7/site-packages/
 # Add Pwnagotchi plugins
 RUN git clone https://github.com/evilsocket/pwnagotchi-plugins-contrib.git "${PWNAGOTCHI_VENV:?}"/plugins
-# Add experience plugins
-COPY ./plugins/exp.py "${PWNAGOTCHI_VENV:?}"/plugins/exp.py 
+# Add some other plugins
+COPY ./plugins/*.py "${PWNAGOTCHI_VENV:?}"/plugins/
 ##################################################
 ## "main" stage
 ##################################################

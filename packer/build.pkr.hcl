@@ -134,7 +134,8 @@ build {
       ,
       <<EOF
         curl -fsSL https://tailscale.com/install.sh | sh
-      EOF,
+      EOF
+      ,
       <<EOF
         curl --create-dirs -o /root/.ssh/authorized.keys https://github.com/cyrinux.keys
         chmod 0600 /root/.ssh/authorized_keys
