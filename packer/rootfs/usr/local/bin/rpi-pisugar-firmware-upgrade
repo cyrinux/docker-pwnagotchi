@@ -2,6 +2,7 @@
 
 set -e
 
+VERSION="1.6.4"
 TEMPDIR=$(mktemp -d /tmp/pisugar-update.XXXXXXX)
 mkdir -p $TEMPDIR
 
@@ -16,8 +17,8 @@ if which dpkg > /dev/null; then
 
     # Install programmer
     if ! which pisugar-programmer > /dev/null; then
-        wget -O $TEMPDIR/pisugar-programmer_1.6.4_armhf.deb https://cdn.pisugar.com/release/pisugar-programmer_1.6.4_armhf.deb
-        sudo dpkg -i $TEMPDIR/pisugar-programmer_1.6.4_armhf.deb
+        wget -O $TEMPDIR/pisugar-programmer_${VERSION}_armhf.deb https://cdn.pisugar.com/release/pisugar-programmer_${VERSION}_armhf.deb
+        sudo dpkg -i $TEMPDIR/pisugar-programmer_${VERSION}_armhf.deb
     fi
 
     # Stop pisugar-server
@@ -42,9 +43,9 @@ if which dpkg > /dev/null; then
     # Upgrade success
     echo "Upgrade complete!"
 else
-    echo "You need to manually download the fireware and upgrade the pisugar: "
-    echo "Fireware url: https://cdn.pisugar.com/release/pisugar-3-application.bin"
-    echo "Programmer url: https://cdn.pisugar.com/release/pisugar-programmer_1.6.4_armhf.deb"
+    echo "You need to manually download the firmware and upgrade the pisugar: "
+    echo "Firmware url: https://cdn.pisugar.com/release/pisugar-3-application.bin"
+    echo "Programmer url: https://cdn.pisugar.com/release/pisugar-programmer_${VERSION}_armhf.deb"
 fi
 
 echo "If you need help, visit https://github.com/PiSugar/"
