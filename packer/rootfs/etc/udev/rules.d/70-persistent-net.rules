@@ -1,1 +1,4 @@
+# hardcoded interface name for the rpi4 with usb interfaces
+# TODO: use predictable interfaces name
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="dc:a6:32:6e:c5:38", NAME="wlan0"
 SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="00:c0:ca:b1:64:59", NAME="wlan1"
