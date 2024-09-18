@@ -135,7 +135,7 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Bettercap
-ARG BETTERCAP_TREEISH=v2.32.0
+ARG BETTERCAP_TREEISH=v2.40.0
 ARG BETTERCAP_REMOTE=https://github.com/bettercap/bettercap.git
 RUN mkdir /tmp/bettercap/
 WORKDIR /tmp/bettercap/
