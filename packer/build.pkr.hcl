@@ -2,6 +2,10 @@ variable "image_name" {
   default = env("IMAGE_NAME")
 }
 
+variable "pisugar_enabled" {
+  default = env("PWNAGOTCHI_PISUGAR_ENABLED")
+}
+
 build {
   name = "main"
 
@@ -92,7 +96,7 @@ build {
       EOF
       ,
       <<EOF
-        [ "${PWNAGOTCHI_PISUGAR_ENABLED}" == "true" ] && rpi-pisugar-install
+        [ "${var.pisugar_enabled}" == "true" ] && rpi-pisugar-install
         rpi-rtl8821au-update
         rpi-nexmon-update
         rm -rf /usr/local/src/nexmon/
