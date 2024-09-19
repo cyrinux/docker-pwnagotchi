@@ -1,5 +1,6 @@
 /dist/
 /packer/rootfs/etc/pwnagotchi.env
+/packer/rootfs/etc/pisugar-server/config.json
 /packer/rootfs/etc/hostname
 /packer/rootfs/etc/hosts
 /packer/dist/
