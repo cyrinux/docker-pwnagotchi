@@ -1,3 +1,4 @@
 #!/bin/sh
+systemctl restart tailscaled
 docker pull docker.io/cyrinux/pwnagotchi:latest
 pwnagotchi-auto
