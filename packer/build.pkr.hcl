@@ -57,7 +57,7 @@ build {
         apt-get install -y \
           bash \
           ca-certificates \
-          crda \
+          wireless-regdb \
           curl \
           dnsmasq \
           dphys-swapfile \
