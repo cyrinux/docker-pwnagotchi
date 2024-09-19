@@ -64,6 +64,7 @@ build {
           openssh-server \
           zstd \
           golang \
+          vim \
           bc
       EOF
       ,
@@ -91,7 +92,7 @@ build {
       EOF
       ,
       <<EOF
-        rpi-pisugar-install
+        [ "${PWNAGOTCHI_PISUGAR_ENABLED}" == "true" ] && rpi-pisugar-install
         rpi-rtl8821au-update
         rpi-nexmon-update
         rm -rf /usr/local/src/nexmon/
@@ -135,8 +136,7 @@ build {
       <<EOF
         curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.gpg | apt-key add -
         curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.list | tee /etc/apt/sources.list.d/tailscale.list
-        apt-get update
-        apt-get install tailscale -y
+        apt-get update && apt-get install tailscale -y
       EOF
       ,
       <<EOF

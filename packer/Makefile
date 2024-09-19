@@ -46,6 +46,7 @@ $(PACKER_ARMHF_OUT):
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hostname.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/hosts.template > '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
 	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
+	envsubst < '$(PACKER_WORK_DIR)'/rootfs/etc/pisugar-server/config.json.template > '$(PACKER_WORK_DIR)'/rootfs/etc/pisugar-server/config.json
 	'$(SUDO)' '$(PACKER)' build -force\
 		-only=main.arm-image.armhf\
 		-var cpu_type='$(CPU_TYPE)'\
@@ -64,3 +65,4 @@ clean:
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/pwnagotchi.env
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hostname
 	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/hosts
+	rm -f '$(PACKER_WORK_DIR)'/rootfs/etc/pisugar-server/config.json
