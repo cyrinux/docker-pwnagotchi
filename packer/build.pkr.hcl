@@ -77,7 +77,8 @@ build {
         apt-get install -y \
           python3 python3-rpi.gpio python3-pip \
           python3-smbus python-dev-is-python3 \
-          libopenjp2-7 python3-pil
+          libopenjp2-7 \
+          && pip3 install Pillow==8.2.0
       EOF
       ,
       <<EOF
