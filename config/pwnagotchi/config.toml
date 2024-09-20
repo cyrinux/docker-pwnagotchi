@@ -73,7 +73,7 @@ main.plugins.bt-tether.devices.android-phone.interval = 1             # in minue
                                                                       ## the device be searched
 main.plugins.bt-tether.devices.android-phone.scantime = 10            # in seconds, how long should be searched
                                                                       ## on each interval
-main.plugins.bt-tether.devices.android-phone.max_tries = 30           # how many times it should try to find the
+main.plugins.bt-tether.devices.android-phone.max_tries = 10           # how many times it should try to find the
                                                                       ## phone (0 = endless)
 main.plugins.bt-tether.devices.android-phone.share_internet = true   # set to true if you want to have
                                                                       ## internet via bluetooth
@@ -105,7 +105,7 @@ main.plugins.paw-gps.ip = "192.168.44.1:8080"
 main.plugins.ups_lite.enabled = ${PWNAGOTCHI_UPS_LITE_ENABLED}
 
 main.plugins.pisugar2.enabled = ${PWNAGOTCHI_PISUGAR_ENABLED}
-main.plugins.pisugar2.shutdown = 3
+main.plugins.pisugar2.shutdown = 5
 main.plugins.pisugar2.sync_rtc_on_boot = true
 
 main.plugins.exp.enabled = ${PWNAGOTCHI_PLUGIN_EXPERIENCE_ENABLED}
