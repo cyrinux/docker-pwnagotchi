@@ -2,8 +2,8 @@
 
 set -eu
 
-NEXMON_TREEISH='d846e7f48a75695d28167c587ea0b0693577a266'
-NEXMON_REMOTE='https://github.com/seemoo-lab/nexmon.git'
+NEXMON_TREEISH='cea7c4b952b3e67110dc1032b8996dae0db9a857'
+NEXMON_REMOTE='https://github.com/cyrinux/nexmon.git'
 NEXMON_SRCDIR='/usr/local/src/nexmon/'
 OPENWRT_TREEISH='de707b6d535e566479c2ed3e1d09ae5393aa7db3'
 BRCMFMAC_RPI_ZERO_NVRAM_URL="https://raw.githubusercontent.com/openwrt/cypress-nvram/${OPENWRT_TREEISH}/brcmfmac43430-sdio.raspberrypi%2Cmodel-zero-w.txt"
