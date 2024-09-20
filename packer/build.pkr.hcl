@@ -69,6 +69,7 @@ build {
           zstd \
           golang \
           vim \
+          xxd \
           bc
       EOF
       ,
