@@ -96,6 +96,10 @@ build {
       EOF
       ,
       <<EOF
+        apt-get install -y --reinstall gcc-11
+      EOF
+      ,
+      <<EOF
         [ "${var.pisugar_enabled}" == "true" ] && rpi-pisugar-install
         rpi-rtl8821au-update
         rpi-nexmon-update
