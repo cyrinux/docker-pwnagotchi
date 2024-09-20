@@ -138,8 +138,8 @@ build {
       EOF
       ,
       <<EOF
-        curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.gpg | apt-key add -
-        curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.list | tee /etc/apt/sources.list.d/tailscale.list
+        curl -fsSL https://pkgs.tailscale.com/stable/raspbian/$(lsb_release -cs).gpg | apt-key add -
+        curl -fsSL https://pkgs.tailscale.com/stable/raspbian/$(lsb_release -cs).list | tee /etc/apt/sources.list.d/tailscale.list
         apt-get update && apt-get install tailscale -y
       EOF
       ,
