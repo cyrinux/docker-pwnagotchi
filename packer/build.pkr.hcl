@@ -1,9 +1,17 @@
 variable "image_name" {
-  default = env("IMAGE_NAME")
+  type = string
 }
 
 variable "pisugar_enabled" {
-  default = env("PWNAGOTCHI_PISUGAR_ENABLED")
+  type = bool
+}
+
+locals {
+  install_pisugar = <<-EOF
+    %{if var.pisugar_enabled}
+    rpi-pisugar-install
+    %{endif}
+  EOF
 }
 
 build {
@@ -73,6 +81,8 @@ build {
           bc
       EOF
       ,
+      local.install_pisugar
+      ,
       <<EOF
         apt-get install -y \
           python3-rpi.gpio python3-pip \
@@ -97,7 +107,6 @@ build {
       EOF
       ,
       <<EOF
-        [ "${var.pisugar_enabled}" == "true" ] && rpi-pisugar-install
         rpi-rtl8821au-update
         rpi-nexmon-update
         rm -rf /usr/local/src/nexmon/

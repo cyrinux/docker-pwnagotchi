@@ -18,7 +18,6 @@
             envsubst
             gnumake
             docker
-            qemu_full
             pre-commit
           ];
         };

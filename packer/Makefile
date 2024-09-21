@@ -10,6 +10,7 @@ SUDO := $(shell command -v sudo 2>/dev/null)
 export IMAGE_NAME ?= docker.io/cyrinux/pwnagotchi
 export PWNAGOTCHI_NAME ?= pwnagotchi
 export CPU_TYPE ?= arm1176
+export PWNAGOTCHI_PISUGAR_ENABLE ?= false
 
 PACKER_WORK_DIR := ./
 PACKER_CACHE_DIR := ./packer_cache/
@@ -52,6 +53,9 @@ $(PACKER_ARMHF_OUT):
 		-var cpu_type='$(CPU_TYPE)'\
 		-var pwnagotchi_name='$(PWNAGOTCHI_NAME)'\
 		-var image_name='$(IMAGE_NAME)'\
+		-var pisugar_enabled='$(PWNAGOTCHI_PISUGAR_ENABLED)'\
+        -var "git_repo=$(git remote get-url origin)"\
+        -var "git_commit=$(git rev-parse HEAD)"\
 		'$(PACKER_WORK_DIR)'
 	'$(SUDO)' '$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
