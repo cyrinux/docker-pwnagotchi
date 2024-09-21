@@ -54,8 +54,6 @@ $(PACKER_ARMHF_OUT):
 		-var pwnagotchi_name='$(PWNAGOTCHI_NAME)'\
 		-var image_name='$(IMAGE_NAME)'\
 		-var pisugar_enabled='$(PWNAGOTCHI_PISUGAR_ENABLED)'\
-        -var "git_repo=$(git remote get-url origin)"\
-        -var "git_commit=$(git rev-parse HEAD)"\
 		'$(PACKER_WORK_DIR)'
 	'$(SUDO)' '$(QEMU_IMG)' resize -f raw '$(PACKER_ARMHF_OUT)' 8G
 
